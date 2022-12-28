@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { RegisterDto } from '../dtos/register-dto';
 import { PasswordStateMatcher } from '../helpers/password-state-matcher';
 import { emailValidator, matchingPasswordValidator, passwordValidator, usernameValidator } from '../helpers/validators';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -21,17 +24,34 @@ export class RegisterComponent implements OnInit {
 
   public showSpinner: boolean = false;
 
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   public ngOnInit(): void {
   }
 
-  public navigateToLoginForm(): void {
-    
-  }
-
   public submitForm(): void {
+    if (this.registerFormGroup.invalid)
+      return;
 
+    const registerDto: RegisterDto = {
+      username: this.registerFormGroup.get('username')?.value,
+      email: this.registerFormGroup.get('email')?.value,
+      password: this.registerFormGroup.get('password')?.value,
+      confirmPassword: this.registerFormGroup.get('confirmPassword')?.value
+    };
+
+    this.showSpinner = true;
+
+    this.authService.register(registerDto).subscribe({
+      next: () => {
+        this.showSpinner = false;
+        console.log("registered successfully");
+        this.router.navigate(['']);
+      },
+      error: () => {
+        this.showSpinner = false;
+      }
+    });
   }
 
 }
