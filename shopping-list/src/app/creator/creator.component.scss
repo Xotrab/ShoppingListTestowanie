@@ -1,0 +1,17 @@
+.creator-container {
+    display: flex;
+    flex-direction: column;
+
+    margin: 5rem 30rem;
+
+    &__card-header {
+        display: flex;
+        justify-content: space-around;
+
+        .input {
+            width: 20rem;
+            margin-top: 0.25rem;
+        }
+    }
+
+}
