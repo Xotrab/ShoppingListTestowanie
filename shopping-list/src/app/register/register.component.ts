@@ -45,8 +45,7 @@ export class RegisterComponent implements OnInit {
     this.authService.register(registerDto).subscribe({
       next: () => {
         this.showSpinner = false;
-        console.log("registered successfully");
-        this.router.navigate(['']);
+        this.router.navigate(['home']);
       },
       error: () => {
         this.showSpinner = false;

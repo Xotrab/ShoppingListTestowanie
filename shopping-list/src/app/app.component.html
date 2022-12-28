@@ -1,4 +1,14 @@
-<mat-toolbar color="primary">
-  Shopping list
+<mat-toolbar color="primary" class="toolbar">
+  <span>
+    Shopping list
+  </span>
+  <div class="toolbar__logout" *ngIf="currentUser$ | async">
+    <span>
+      logged in as {{ (currentUser$ | async)?.username}}
+    </span>
+    <button mat-raised-button (click)="logout()">
+      Logout
+    </button>
+  </div>
 </mat-toolbar>
 <router-outlet></router-outlet>
