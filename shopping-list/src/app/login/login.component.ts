@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { LoginDto } from '../dtos/login-dto';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,19 +11,36 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class LoginComponent implements OnInit {
   
   public loginFormGroup: FormGroup = new FormGroup({
-    email: new FormControl('', []),
-    password: new FormControl('', [])
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required])
   });
 
   public showSpinner: boolean = false;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
 
   public submitForm(): void {
-    
+    if (this.loginFormGroup.invalid)
+      return;
+
+    const loginDto: LoginDto = {
+      email: this.loginFormGroup.get('email')?.value,
+      password: this.loginFormGroup.get('password')?.value,
+    };
+
+    this.showSpinner = true;
+
+    this.authService.login(loginDto).subscribe({
+      next: () => {
+        this.showSpinner = false;
+      },
+      error: () => {
+        this.showSpinner = false;
+      }
+    });
   }
 
 }

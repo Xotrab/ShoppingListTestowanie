@@ -44,6 +44,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(registerDto).subscribe({
       next: () => {
+        this.authService.updateUsername(registerDto.username);
         this.showSpinner = false;
         this.router.navigate(['home']);
       },

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Auth, authState, createUserWithEmailAndPassword, signOut, updateProfile } from '@angular/fire/auth';
+import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { BehaviorSubject, defer, from, map, Observable, Subscription, switchMap } from 'rxjs';
 import { ApplicationUser } from '../dtos/application-user';
+import { LoginDto } from '../dtos/login-dto';
 import { RegisterDto } from '../dtos/register-dto';
 
 @Injectable({
@@ -43,9 +44,34 @@ export class AuthService {
     )
   }
 
+  public updateUsername(name: string): void {
+    const user = this.currentUser.value;
+    
+    if (user == null)
+        this.currentUser.next(null);
+    else {
+      const applicationUser: ApplicationUser = {
+        id: user.id,
+        email: user.email,
+        username: name
+      }
+
+      this.currentUser.next(applicationUser);
+    }
+  }
+
   public ngOnDestroy(): void {
     if (this.authStateSubscription)
       this.authStateSubscription.unsubscribe();
+  }
+
+  public login(loginDto: LoginDto): Observable<boolean> {
+    return defer(
+      () => signInWithEmailAndPassword(this.auth, loginDto.email, loginDto.password)
+    )
+    .pipe(
+      switchMap(() => from(this.router.navigate(['home'])))
+    );
   }
 
   public logout(): Observable<boolean> {
