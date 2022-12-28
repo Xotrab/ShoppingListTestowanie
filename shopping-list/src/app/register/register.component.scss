@@ -1,10 +1,9 @@
 .register-container {
-    height: 100%;
-
     display: flex;
     align-items: center;
     justify-content: center;
 
+    padding-top: 12.5rem;
 
     &__card {
         width: 30rem;
