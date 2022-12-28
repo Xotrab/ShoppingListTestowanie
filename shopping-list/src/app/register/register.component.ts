@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { RegisterDto } from '../dtos/register-dto';
 import { PasswordStateMatcher } from '../helpers/password-state-matcher';
 import { emailValidator, matchingPasswordValidator, passwordValidator, usernameValidator } from '../helpers/validators';
@@ -24,7 +26,7 @@ export class RegisterComponent implements OnInit {
 
   public showSpinner: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
 
   public ngOnInit(): void {
   }
@@ -50,6 +52,12 @@ export class RegisterComponent implements OnInit {
       },
       error: () => {
         this.showSpinner = false;
+        this.snackBar.open(
+          "Error occured, please try again", 'Ok', {
+            duration: environment.snackbarDuration,
+            panelClass: ['snackbar']
+          }
+        );
       }
     });
   }
