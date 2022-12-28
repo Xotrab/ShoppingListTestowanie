@@ -7,6 +7,8 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth, connectAuthEmulator } from '@angular/fire/auth';
 import { provideFirestore,getFirestore, initializeFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from '@angular/fire/firestore';
 import { provideStorage,getStorage, connectStorageEmulator } from '@angular/fire/storage';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { provideStorage,getStorage, connectStorageEmulator } from '@angular/fire
       connectStorageEmulator(storage, 'localhost', 9199);
       return storage;
     }),
+    BrowserAnimationsModule,
+    MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
