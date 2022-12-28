@@ -4,14 +4,14 @@
 
     margin: 5rem 30rem;
 
-    &__card-header {
+    &__card-input-row {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
+        margin-bottom: 1rem;
 
         .input {
-            width: 20rem;
+            width: 15rem;
             margin-top: 0.25rem;
         }
     }
-
 }

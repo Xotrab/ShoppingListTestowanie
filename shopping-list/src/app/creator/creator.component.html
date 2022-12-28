@@ -3,7 +3,7 @@
         Create your shopping list
     </h2>
     <mat-card>
-        <div class="creator-container__card-header">
+        <div class="creator-container__card-input-row">
             <mat-form-field class="input">
                 <mat-label>
                     Shopping list name
@@ -17,7 +17,51 @@
                 <input matInput [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline">
                 <mat-datepicker-toggle matSuffix [for]="$any(pickerFrom)"></mat-datepicker-toggle>
                 <ngx-mat-datetime-picker #pickerFrom [hideTime]="true"></ngx-mat-datetime-picker>
-              </mat-form-field>
+            </mat-form-field>
         </div>
+        <mat-divider></mat-divider>
+        <div style="margin-top: 2rem; margin-bottom: 1rem;">
+            Add the shopping list item:
+        </div>
+        <mat-radio-group [(ngModel)]="selectedMode" style="display: flex; gap: 1rem; margin-bottom: 0.25rem;">
+            <mat-radio-button [value]="itemMode.Common">
+                commonly used item
+            </mat-radio-button>
+            <mat-radio-button [value]="itemMode.Own">
+                your own item
+            </mat-radio-button>
+        </mat-radio-group>
+        <div class="creator-container__card-input-row">
+            <mat-form-field class="input">
+                <mat-label>
+                    Item name
+                </mat-label>
+                <input matInput>
+                <mat-error>
+                    Provide the name for the shopping item
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="input">
+                <mat-label>
+                    Amount
+                </mat-label>
+                <input matInput>
+                <mat-error>
+                    Provide the amount for the item
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="input">
+                <mat-label>
+                    Unit
+                </mat-label>
+                <input matInput>
+                <mat-error>
+                    Pick the unit for the shopping item
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <button mat-flat-button color="primary">
+            Add item
+        </button>
     </mat-card>
 </div>

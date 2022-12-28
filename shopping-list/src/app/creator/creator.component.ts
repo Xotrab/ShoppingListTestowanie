@@ -1,5 +1,6 @@
 import { NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { Component, OnInit } from '@angular/core';
+import { ItemMode } from '../helpers/item-mode.enum';
 
 const CUSTOM_DATE_FORMAT: NgxMatDateFormats = {
   parse: {
@@ -22,6 +23,8 @@ const CUSTOM_DATE_FORMAT: NgxMatDateFormats = {
   ]
 })
 export class CreatorComponent implements OnInit {
+  public itemMode = ItemMode;
+  public selectedMode: ItemMode = this.itemMode.Common;
 
   constructor() { }
 

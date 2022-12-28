@@ -23,6 +23,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CreatorComponent } from './creator/creator.component';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     NgxMatTimepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatDividerModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]
