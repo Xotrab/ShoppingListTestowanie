@@ -1,0 +1,45 @@
+<div class="login-container">
+    <mat-card class="login-container__card">
+        <mat-card-header>
+            <mat-card-title>
+                Login
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="card-content">
+            <form class="form" [formGroup]="loginFormGroup" (ngSubmit)="submitForm()">
+                <mat-form-field>
+                    <mat-label>
+                        <mat-icon>email</mat-icon>
+                        Email address
+                    </mat-label>
+                    <input matInput formControlName="email">
+                    <mat-error>
+                        Provide an email
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>
+                        <mat-icon class="mat-icon-scaled-small">lock</mat-icon>
+                        Password
+                    </mat-label>
+                    <input matInput type="password" formControlName="password" autocomplete="off">
+                    <mat-error>
+                        Provide the password
+                    </mat-error>
+                </mat-form-field>
+                <button mat-raised-button color="primary" type="submit">
+                    Login
+                </button>
+                <mat-progress-spinner *ngIf="showSpinner" class="spinner" color="accent" mode="indeterminate">
+            </mat-progress-spinner>
+            </form>
+            <span>
+                No account?
+            </span>
+            <button mat-raised-button [routerLink]="['/register']">
+                Register
+            </button>
+        </mat-card-content>
+    </mat-card>
+</div>
+

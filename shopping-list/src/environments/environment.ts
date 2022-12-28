@@ -11,7 +11,8 @@ export const environment = {
     authDomain: 'shoppinglist-6aa10.firebaseapp.com',
     messagingSenderId: '751022542141',
   },
-  production: false
+  production: false,
+  snackbarDuration: 3000
 };
 
 /*
