@@ -32,8 +32,16 @@ export class RegisterComponent implements OnInit {
   }
 
   public submitForm(): void {
-    if (this.registerFormGroup.invalid)
+    if (this.registerFormGroup.invalid) {
+      this.snackBar.open(
+        "The provided input is invalid", 'Ok', {
+          duration: environment.snackbarDuration,
+          panelClass: ['snackbar']
+        }
+      );
+
       return;
+    }
 
     const registerDto: RegisterDto = {
       username: this.registerFormGroup.get('username')?.value,
