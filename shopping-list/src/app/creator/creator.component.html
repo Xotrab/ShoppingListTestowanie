@@ -10,18 +10,14 @@
                 </mat-label>
                 <input matInput>
                 <mat-error>
-                    Provide an email
+                    Provide the name for the shopping list
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="input">
-                <mat-label>
-                    Shopping list name
-                </mat-label>
-                <input matInput>
-                <mat-error>
-                    Provide an email
-                </mat-error>
-            </mat-form-field>
+                <input matInput [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline">
+                <mat-datepicker-toggle matSuffix [for]="$any(pickerFrom)"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #pickerFrom [hideTime]="true"></ngx-mat-datetime-picker>
+              </mat-form-field>
         </div>
     </mat-card>
 </div>
