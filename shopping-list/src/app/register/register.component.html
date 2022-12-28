@@ -14,7 +14,7 @@
                     </mat-label>
                     <input matInput formControlName="email">
                     <mat-error>
-                        Invalid email
+                        Provide an email
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field>
@@ -56,7 +56,7 @@
             <span>
                 Already have an account?
             </span>
-            <button mat-raised-button (click)="navigateToLoginForm()">
+            <button mat-raised-button [routerLink]="['/']">
                 Login
             </button>
         </mat-card-content>
