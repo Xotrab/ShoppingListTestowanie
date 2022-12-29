@@ -8,14 +8,16 @@
         width: 100%;
     }
 
-    .mat-row:hover {
-        background-color: whitesmoke;
-        cursor: pointer;
+    .mat-column-remove {
+        width: 10%;
     }
 
-    .no-hover {
-        background-color: #FFFFFF !important;
-        cursor: default !important;
+    .mat-column-position {
+        width: 10%;
+    }
+
+    .mat-column-item {
+        width: 40%;
     }
 
     &__card-input-row {

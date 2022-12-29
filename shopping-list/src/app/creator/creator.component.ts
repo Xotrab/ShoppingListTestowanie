@@ -48,7 +48,7 @@ export class CreatorComponent implements OnInit {
     purchased: false
   };
 
-  public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit'];
+  public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit', 'remove'];
 
   public dataSource = new MatTableDataSource<ShoppingItemDto>();
   
