@@ -4,6 +4,20 @@
 
     margin: 5rem 30rem;
 
+    table {
+        width: 100%;
+    }
+
+    .mat-row:hover {
+        background-color: whitesmoke;
+        cursor: pointer;
+    }
+
+    .no-hover {
+        background-color: #FFFFFF !important;
+        cursor: default !important;
+    }
+
     &__card-input-row {
         display: flex;
         justify-content: space-between;

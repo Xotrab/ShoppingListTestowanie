@@ -25,6 +25,9 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -78,7 +81,10 @@ import { MatRadioModule } from '@angular/material/radio';
     NgxMatNativeDateModule,
     MatDatepickerModule,
     MatDividerModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSelectModule,
+    MatListModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
