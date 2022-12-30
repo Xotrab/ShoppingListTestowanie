@@ -8,6 +8,27 @@
     
     &__create-btn {
         align-self: flex-end;
+        margin-bottom: 2rem;
+    }
+
+    mat-card {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .mat-column-action {
+        width: 22%;
+    }
+
+    .mat-column-position {
+        width: 10%;
+    }
+
+    .mat-column-name {
+        width: 40%;
     }
 
 }

@@ -1,6 +1,44 @@
-<mat-card class="home-container">
+<div class="home-container">
     <button mat-raised-button color="primary" class="home-container__create-btn" [routerLink]="['/creator']">
         Create shopping list
     </button>
-</mat-card>
+    <mat-card style="padding: 0;">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef> No. </th>
+              <td mat-cell *matCellDef="let i=index"> {{i+1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="deadline">
+              <th mat-header-cell *matHeaderCellDef> Deadline </th>
+              <td mat-cell *matCellDef="let element"> {{element.deadline | fromFirebaseDate | date: 'dd/MM/yyyy'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="itemCount">
+              <th mat-header-cell *matHeaderCellDef> Items </th>
+              <td mat-cell *matCellDef="let element"> {{element.items.length}} </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let i=index;">
+                    <button mat-stroked-button color="warn" style="margin-right: 1rem;">
+                        Remove
+                    </button>
+                    <button mat-stroked-button>
+                        Details
+                    </button>
+                </td>
+              </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                  No Shopping lists yet
+                </td>
+            </tr>
+          </table>
+    </mat-card>
+</div>
 

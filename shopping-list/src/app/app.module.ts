@@ -28,6 +28,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
+import { FromFirebaseDatePipe } from './helpers/from-firebase-date.pipe';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { MatTableModule } from '@angular/material/table';
     RegisterComponent,
     LoginComponent,
     HomeComponent,
-    CreatorComponent
+    CreatorComponent,
+    FromFirebaseDatePipe
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CollectionReference, Firestore } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { addDoc, collection } from '@firebase/firestore';
@@ -29,10 +29,16 @@ export class ShoppingListsService {
     private router: Router) {
     this.shoppingListsCollectionRef = collection(this.firestore, this.collectionName) as CollectionReference<ShoppingListDto>;
 
-    this.authService.currentUser$.pipe(
-      filter(currentUser => currentUser !== null)
-    )
-    .subscribe(currentUser => this.userId = currentUser?.id);
+    this.authService.currentUser$.subscribe(currentUser => {
+      this.userId = currentUser?.id;
+
+      if (!this.userId) {
+        this.shoppingLists.next([]);
+      }
+      else {
+        this.getShoppingLists();
+      }
+    });
    }
 
    public showSnackbar(message: string): void {
@@ -52,7 +58,26 @@ export class ShoppingListsService {
         this.router.navigate(['home']);
       })
       .catch(_ => {
-        this.showSnackbar("The error occured while creating the shopping list");
+        this.showSnackbar("Error occured while creating the shopping list");
       });
+   }
+
+   public getShoppingLists(): void {
+    const userShoppingListsQuery = query(this.shoppingListsCollectionRef, where('userId', '==', this.userId));
+
+    getDocs(userShoppingListsQuery)
+      .then((snapshot) => {
+        let shoppingLists: ShoppingListDto[] = [];
+
+        snapshot.docs.forEach((doc)=> {
+          const shoppingList: ShoppingListDto = {id: doc.id, ...doc.data()};
+          shoppingLists.push(shoppingList);
+        });
+
+        this.shoppingLists.next(shoppingLists);
+      })
+      .catch(_ => {
+        this.showSnackbar("Error occured while fetching the shopping lists")
+      })
    }
 }
