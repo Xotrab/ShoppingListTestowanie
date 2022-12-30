@@ -22,8 +22,8 @@
             </ng-container>
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let i=index;">
-                    <button mat-stroked-button color="warn" style="margin-right: 1rem;">
+                <td mat-cell *matCellDef="let element;">
+                    <button mat-stroked-button color="warn" style="margin-right: 1rem;" (click)="removeShoppingList(element.id)">
                         Remove
                     </button>
                     <button mat-stroked-button>

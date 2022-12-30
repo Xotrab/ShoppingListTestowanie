@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CollectionReference, Firestore, getDocs, query, where } from '@angular/fire/firestore';
+import { CollectionReference, deleteDoc, doc, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { addDoc, collection } from '@firebase/firestore';
@@ -52,7 +52,8 @@ export class ShoppingListsService {
 
    public createShoppingList(newShoppingList: ShoppingListDto): void {
     addDoc(this.shoppingListsCollectionRef, newShoppingList)
-      .then(() => {
+      .then((doc) => {
+        newShoppingList.id = doc.id;
         const shoppingLists = this.shoppingLists.value;
         this.shoppingLists.next([...shoppingLists, newShoppingList]);
         this.router.navigate(['home']);
@@ -77,7 +78,22 @@ export class ShoppingListsService {
         this.shoppingLists.next(shoppingLists);
       })
       .catch(_ => {
-        this.showSnackbar("Error occured while fetching the shopping lists")
+        this.showSnackbar("Error occured while fetching the shopping lists");
+      })
+   }
+
+   public removeShoppingList(id: string): void{
+    const shoppingListRef = doc(this.firestore, this.collectionName, id);
+    
+    deleteDoc(shoppingListRef)
+      .then(() => {
+        let shoppingLists = this.shoppingLists.value;
+        shoppingLists = shoppingLists.filter(shoppingList => shoppingList.id !== id);
+        
+        this.shoppingLists.next(shoppingLists);
+      })
+      .catch(_ => {
+        this.showSnackbar("Error occured while removing the shopping list");
       })
    }
 }

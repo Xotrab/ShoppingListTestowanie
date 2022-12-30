@@ -18,4 +18,8 @@ export class HomeComponent implements OnInit {
     this.shoppingListsService.shoppingLists$.subscribe(shoppingLists => this.dataSource.data = shoppingLists);
   }
 
+  public removeShoppingList(id: string): void {
+    this.shoppingListsService.removeShoppingList(id);
+  }
+
 }
