@@ -11,7 +11,7 @@
                 <input matInput  [(ngModel)]="shoppingList.name">
             </mat-form-field>
             <mat-form-field class="input">
-                <input matInput [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline" [(ngModel)]="shoppingList.deadline">
+                <input matInput readonly [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline" [(ngModel)]="shoppingList.deadline">
                 <mat-datepicker-toggle matSuffix [for]="$any(pickerFrom)"></mat-datepicker-toggle>
                 <ngx-mat-datetime-picker #pickerFrom [hideTime]="true"></ngx-mat-datetime-picker>
             </mat-form-field>
@@ -104,7 +104,12 @@
             </tr>
           </table>
     </mat-card>
-    <button mat-raised-button color="primary" style="margin-top: 2rem; width: 30%; align-self: flex-end;">
-        Create shopping list
-    </button>
+    <div style="display: flex; gap: 2rem;">
+        <button mat-raised-button style="margin-top: 2rem;" [routerLink]="['/home']">
+            Cancel
+        </button>
+        <button mat-raised-button color="primary" style="margin-top: 2rem; width: 30%;" (click)="createShoppingList()">
+            Create shopping list
+        </button>
+    </div>
 </div>

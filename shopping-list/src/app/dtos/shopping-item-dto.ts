@@ -1,5 +1,4 @@
 export interface ShoppingItemDto {
-	id?: string;
 	name: string;
 	quantity: number | null;
 	unit: string;
