@@ -17,7 +17,14 @@ export class AuthService {
     return this.currentUser.asObservable();
   }
 
+  public isAuthenticated$: Observable<boolean>;
+
   constructor(private auth: Auth, private router: Router) {
+    this.isAuthenticated$ = authState(this.auth)
+      .pipe(
+        map(user => user !== null)
+      );
+
     this.authStateSubscription = authState(this.auth).subscribe(user => {
       if (user == null)
         this.currentUser.next(null);
