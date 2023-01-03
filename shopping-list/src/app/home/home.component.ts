@@ -1,5 +1,6 @@
 import { NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { Component, OnInit } from '@angular/core';
+import { Timestamp } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { filter } from 'rxjs';
@@ -34,10 +35,12 @@ export class HomeComponent implements OnInit {
 
   public shoppingList: ShoppingListDto = {
     name: "",
-    deadline: "",
+    deadline: null,
     userId: "",
     items: []
   };
+
+  public deadlineInDate: Date | null = null;
 
   constructor(private shoppingListsService: ShoppingListsService, private authService: AuthService, private snackBar: MatSnackBar) { }
 
@@ -64,16 +67,19 @@ export class HomeComponent implements OnInit {
   }
 
   public createShoppingList(): void {
-    if (!this.shoppingList.name || !this.shoppingList.deadline) {
+    if (!this.shoppingList.name || !this.deadlineInDate) {
       this.showSnackbar("Please provide the name and the deadline in order to create the shopping list");
       return;
     }
+
+    this.shoppingList.deadline = Timestamp.fromDate(this.deadlineInDate!);
 
     this.shoppingListsService.createShoppingList({...this.shoppingList});
 
     // reset the fields after creating the new shopping list
     this.shoppingList.name = "";
-    this.shoppingList.deadline = "";
+    this.shoppingList.deadline = null;
+    this.deadlineInDate = null;
   }
 
 }

@@ -4,6 +4,19 @@
 
     margin: 5rem 30rem;
 
+    &__header-data {
+        margin-bottom: 0.5rem;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        .action-btn {
+            margin-bottom: 1rem;
+        }
+    }
+
     table {
         width: 100%;
     }

@@ -38,10 +38,12 @@ export class ShoppingListComponent implements OnInit {
 
   public shoppingList: ShoppingListDto = {
     name: "",
-    deadline: "",
+    deadline: null,
     userId: "",
     items: []
   };
+
+  public deadlineInDate!: Date;
 
   public newItem: ShoppingItemDto = {
     name: "",
@@ -57,7 +59,10 @@ export class ShoppingListComponent implements OnInit {
 
   public dataSource = new MatTableDataSource<ShoppingItemDto>();
   
-  constructor(private snackBar: MatSnackBar, private shoppingListsService: ShoppingListsService, private route: ActivatedRoute) { }
+  constructor(
+    private snackBar: MatSnackBar,
+    private shoppingListsService: ShoppingListsService,
+    private route: ActivatedRoute) { }
 
   public ngOnInit(): void {
     this.shoppingListId = this.route.snapshot.paramMap.get('id')!;
@@ -66,6 +71,7 @@ export class ShoppingListComponent implements OnInit {
 
       if (maybeList) {
         this.shoppingList = maybeList;
+        this.deadlineInDate = this.shoppingList.deadline?.toDate()!;
         this.dataSource.data = this.shoppingList.items;
       }
     });
