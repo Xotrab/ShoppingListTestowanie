@@ -56,6 +56,8 @@ export class ShoppingListComponent implements OnInit {
     purchased: false
   };
 
+  public uploadedImagePreviewUrl!: string | null;
+
   public shoppingListId!: string;
 
   public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit', 'remove', 'edit'];
@@ -81,6 +83,21 @@ export class ShoppingListComponent implements OnInit {
         this.newShoppingListName = this.shoppingList.name;
       }
     });
+  }
+
+  public onImageSelected(event: any): void {
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+          this.uploadedImagePreviewUrl = event.target.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+      event.target.value = '';
+    }
+  }
+
+  public removeImage(): void {
+    this.uploadedImagePreviewUrl = null;
   }
 
   public resetShoppingItemName(): void {

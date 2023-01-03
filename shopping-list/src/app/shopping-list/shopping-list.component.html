@@ -33,7 +33,7 @@
     <h2>
         Add shopping list items
     </h2>
-    <mat-card>
+    <mat-card style="display: flex; flex-direction: column;">
         <mat-radio-group [(ngModel)]="selectedMode" style="display: flex; gap: 1rem; margin-bottom: 0.25rem;">
             <mat-radio-button [value]="itemMode.Common" (change)="resetShoppingItemName()">
                 commonly used item
@@ -76,7 +76,15 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <button mat-raised-button color="primary" (click)="addItem()">
+        <button *ngIf="!uploadedImagePreviewUrl" mat-stroked-button style="width: 26%;" (click)="fileInput.click()">
+            Attach image
+        </button>
+        <button *ngIf="uploadedImagePreviewUrl" mat-stroked-button color="warn" style="width: 26%;" (click)="removeImage()">
+            Remove image
+        </button>
+        <input hidden #fileInput type="file" accept="image/png, image/jpeg" (change)="onImageSelected($event)">
+        <img *ngIf="uploadedImagePreviewUrl" [src]="uploadedImagePreviewUrl" class="image-preview">
+        <button mat-raised-button color="primary" style="width: 10%; align-self: flex-end;" (click)="addItem()">
             Add item
         </button>
     </mat-card>
