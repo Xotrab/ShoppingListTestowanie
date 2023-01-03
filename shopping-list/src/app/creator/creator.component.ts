@@ -2,12 +2,11 @@ import { NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-compo
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { filter } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { COMMONLY_USED_ITEMS, DEFAULT_UNITS, ShoppingItemDto } from '../dtos/shopping-item-dto';
 import { ShoppingListDto } from '../dtos/shopping-list-dto';
 import { ItemMode } from '../helpers/item-mode.enum';
-import { AuthService } from '../services/auth.service';
 import { ShoppingListsService } from '../services/shopping-lists.service';
 
 const CUSTOM_DATE_FORMAT: NgxMatDateFormats = {
@@ -52,18 +51,24 @@ export class CreatorComponent implements OnInit {
     purchased: false
   };
 
+  public shoppingListId!: string;
+
   public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit', 'remove'];
 
   public dataSource = new MatTableDataSource<ShoppingItemDto>();
   
-  constructor(private snackBar: MatSnackBar, private shoppingListsService: ShoppingListsService, private authService: AuthService) { }
+  constructor(private snackBar: MatSnackBar, private shoppingListsService: ShoppingListsService, private route: ActivatedRoute) { }
 
   public ngOnInit(): void {
-    this.dataSource.data = this.shoppingList.items;
-    this.authService.currentUser$.pipe(
-      filter(currentUser => currentUser !== null)
-    )
-    .subscribe(currentUser => this.shoppingList.userId = currentUser?.id!);
+    this.shoppingListId = this.route.snapshot.paramMap.get('id')!;
+    this.shoppingListsService.shoppingLists$.subscribe(shoppingLists => {
+      const maybeList = shoppingLists.find(shoppingList => shoppingList.id === this.shoppingListId);
+
+      if (maybeList) {
+        this.shoppingList = maybeList;
+        this.dataSource.data = this.shoppingList.items;
+      }
+    });
   }
 
   public resetShoppingItemName(): void {
@@ -85,8 +90,7 @@ export class CreatorComponent implements OnInit {
       return;
     }
     
-    this.shoppingList.items.push({...this.newItem });
-    this.dataSource.data = this.shoppingList.items;
+    this.shoppingListsService.addShoppingListItem(this.shoppingList.id!, {...this.newItem});
 
     this.newItem = {
       name: "",
@@ -98,17 +102,7 @@ export class CreatorComponent implements OnInit {
   }
 
   public removeItem(index: number): void {
-    this.shoppingList.items.splice(index, 1);
-    this.dataSource.data = this.shoppingList.items;
-  }
-
-  public createShoppingList(): void {
-    if (!this.shoppingList.name || !this.shoppingList.deadline || !this.shoppingList.items.length) {
-      this.showSnackbar("Please provide the name, deadline and at least one item for the shopping list");
-      return;
-    }
-
-    this.shoppingListsService.createShoppingList(this.shoppingList);
+    this.shoppingListsService.removeShoppingListItem(this.shoppingListId!, index);
   }
 
 }

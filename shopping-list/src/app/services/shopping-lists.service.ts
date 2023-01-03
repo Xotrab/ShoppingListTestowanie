@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { CollectionReference, deleteDoc, doc, Firestore, getDocs, query, where } from '@angular/fire/firestore';
+import { CollectionReference, deleteDoc, doc, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { ref, Storage, uploadBytes, UploadMetadata } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { addDoc, collection } from '@firebase/firestore';
-import { BehaviorSubject, defer, filter, Observable } from 'rxjs';
+import { BehaviorSubject, defer, filter, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ShoppingListDto } from '../dtos/shopping-list-dto';
 import { AuthService } from './auth.service';
+import { uuidv4 } from '@firebase/util';
+import { ShoppingItemDto } from '../dtos/shopping-item-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +27,7 @@ export class ShoppingListsService {
 
   constructor(
     private firestore: Firestore,
+    private storage: Storage,
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router) {
@@ -41,6 +45,17 @@ export class ShoppingListsService {
     });
    }
 
+   public uploadImage(image: File) {
+    const uuid = uuidv4();
+    const storageRef = ref(this.storage, `images/${this.userId}/${uuid}`);
+
+    const metadata: UploadMetadata  = {
+      contentType: image.type,
+    };
+
+    return defer(() => uploadBytes(storageRef, image, metadata)).pipe(map(() => uuid));
+  }
+
    public showSnackbar(message: string): void {
     this.snackBar.open(
       message, 'Ok', {
@@ -56,7 +71,6 @@ export class ShoppingListsService {
         newShoppingList.id = doc.id;
         const shoppingLists = this.shoppingLists.value;
         this.shoppingLists.next([...shoppingLists, newShoppingList]);
-        this.router.navigate(['home']);
       })
       .catch(_ => {
         this.showSnackbar("Error occured while creating the shopping list");
@@ -79,21 +93,56 @@ export class ShoppingListsService {
       })
       .catch(_ => {
         this.showSnackbar("Error occured while fetching the shopping lists");
-      })
+      });
    }
 
-   public removeShoppingList(id: string): void{
+   public removeShoppingList(id: string): void {
     const shoppingListRef = doc(this.firestore, this.collectionName, id);
     
     deleteDoc(shoppingListRef)
       .then(() => {
         let shoppingLists = this.shoppingLists.value;
         shoppingLists = shoppingLists.filter(shoppingList => shoppingList.id !== id);
-        
+
         this.shoppingLists.next(shoppingLists);
       })
       .catch(_ => {
         this.showSnackbar("Error occured while removing the shopping list");
+      });
+   }
+
+   public addShoppingListItem(listId: string, newItem: ShoppingItemDto): void {
+    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
+
+    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
+    const updatedItems = [...listToUpdate.items, newItem];
+
+    updateDoc(shoppingListRef, {items: updatedItems})
+      .then(() => {
+        listToUpdate.items = updatedItems;
+        this.shoppingLists.next(this.shoppingLists.value); 
       })
+      .catch(_ => {
+        this.showSnackbar("Error occured while adding the shopping list item");
+      });
+   }
+
+   public removeShoppingListItem(listId: string, itemIndex: number): void {
+    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
+
+    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
+
+    let updatedItems = [...listToUpdate.items];
+
+    updatedItems.splice(itemIndex, 1);
+
+    updateDoc(shoppingListRef, {items: updatedItems})
+      .then(() => {
+        listToUpdate.items = updatedItems;
+        this.shoppingLists.next(this.shoppingLists.value); 
+      })
+      .catch(_ => {
+        this.showSnackbar("Error occured while reoving the shopping list item");
+      });
    }
 }

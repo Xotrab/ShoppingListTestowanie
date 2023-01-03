@@ -1,8 +1,27 @@
 <div class="home-container">
-    <button mat-raised-button color="primary" class="home-container__create-btn" [routerLink]="['/creator']">
-        Create shopping list
-    </button>
-    <mat-card style="padding: 0;">
+    <h2 style="align-self: flex-start">
+        Create new shopping list
+    </h2>
+    <div class="home-container__creator">
+      <mat-form-field class="input">
+          <mat-label>
+              Shopping list name
+          </mat-label>
+          <input matInput  [(ngModel)]="shoppingList.name">
+      </mat-form-field>
+      <mat-form-field class="input">
+          <input matInput readonly [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline" [(ngModel)]="shoppingList.deadline">
+          <mat-datepicker-toggle matSuffix [for]="$any(pickerFrom)"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker #pickerFrom [hideTime]="true"></ngx-mat-datetime-picker>
+      </mat-form-field>
+      <button mat-raised-button color="primary" class="create-btn" (click)="createShoppingList()">
+          Create shopping list
+      </button>
+    </div>
+    <h2 style="align-self: flex-start;">
+      Browse shopping lists
+    </h2>
+    <mat-card style="padding: 0; margin-top: 0.5rem;">
         <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="position">
               <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -26,7 +45,7 @@
                     <button mat-stroked-button color="warn" style="margin-right: 1rem;" (click)="removeShoppingList(element.id)">
                         Remove
                     </button>
-                    <button mat-stroked-button>
+                    <button mat-stroked-button [routerLink]="['/creator', element.id]">
                         Details
                     </button>
                 </td>

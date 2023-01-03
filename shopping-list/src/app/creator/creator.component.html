@@ -1,25 +1,8 @@
 <div class="creator-container">
     <h2>
-        Create your shopping list
+        Add shopping list items
     </h2>
     <mat-card>
-        <div class="creator-container__card-input-row">
-            <mat-form-field class="input">
-                <mat-label>
-                    Shopping list name
-                </mat-label>
-                <input matInput  [(ngModel)]="shoppingList.name">
-            </mat-form-field>
-            <mat-form-field class="input">
-                <input matInput readonly [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline" [(ngModel)]="shoppingList.deadline">
-                <mat-datepicker-toggle matSuffix [for]="$any(pickerFrom)"></mat-datepicker-toggle>
-                <ngx-mat-datetime-picker #pickerFrom [hideTime]="true"></ngx-mat-datetime-picker>
-            </mat-form-field>
-        </div>
-        <mat-divider></mat-divider>
-        <div style="margin-top: 2rem; margin-bottom: 1rem;">
-            Add the shopping list item:
-        </div>
         <mat-radio-group [(ngModel)]="selectedMode" style="display: flex; gap: 1rem; margin-bottom: 0.25rem;">
             <mat-radio-button [value]="itemMode.Common" (change)="resetShoppingItemName()">
                 commonly used item
@@ -106,10 +89,7 @@
     </mat-card>
     <div style="display: flex; gap: 2rem;">
         <button mat-raised-button style="margin-top: 2rem;" [routerLink]="['/home']">
-            Cancel
-        </button>
-        <button mat-raised-button color="primary" style="margin-top: 2rem; width: 30%;" (click)="createShoppingList()">
-            Create shopping list
+            Back
         </button>
     </div>
 </div>

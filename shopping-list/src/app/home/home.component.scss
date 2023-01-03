@@ -5,11 +5,20 @@
     justify-content: center;
 
     margin: 5rem 30rem;
-    
-    &__create-btn {
-        align-self: flex-end;
-        margin-bottom: 2rem;
+
+    &__creator {
+        margin-bottom: 0.5rem;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        .create-btn {
+            margin-bottom: 1rem;
+        }
     }
+    
 
     mat-card {
         width: 100%;
