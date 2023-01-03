@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CollectionReference, deleteDoc, doc, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { CollectionReference, deleteDoc, doc, Firestore, getDocs, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
 import { ref, Storage, uploadBytes, UploadMetadata } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -142,7 +142,39 @@ export class ShoppingListsService {
         this.shoppingLists.next(this.shoppingLists.value); 
       })
       .catch(_ => {
-        this.showSnackbar("Error occured while reoving the shopping list item");
+        this.showSnackbar("Error occured while removing the shopping list item");
+      });
+   }
+
+   public updateShoppingListName(listId: string, newName: string) : void {
+    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
+
+    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
+
+    updateDoc(shoppingListRef, {name: newName})
+      .then(() => {
+        listToUpdate.name = newName;
+        this.shoppingLists.next(this.shoppingLists.value);
+        this.showSnackbar("The shopping list name has been successfully updated");
+      })
+      .catch(_ => {
+        this.showSnackbar("Error occured while updating the shopping list name");
+      });
+   }
+
+   public updateShoppingListDeadline(listId: string, newDeadline: Timestamp) : void {
+    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
+
+    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
+
+    updateDoc(shoppingListRef, {deadline: newDeadline})
+      .then(() => {
+        listToUpdate.deadline = newDeadline;
+        this.shoppingLists.next(this.shoppingLists.value);
+        this.showSnackbar("The shopping list deadline has been successfully updated");
+      })
+      .catch(_ => {
+        this.showSnackbar("Error occured while updating the shopping list deadline");
       });
    }
 }

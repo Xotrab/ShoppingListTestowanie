@@ -1,5 +1,6 @@
 import { NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { Component, OnInit } from '@angular/core';
+import { Timestamp } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -43,7 +44,9 @@ export class ShoppingListComponent implements OnInit {
     items: []
   };
 
+  // Fields used for two way data binding editing
   public deadlineInDate!: Date;
+  public newShoppingListName!: string;
 
   public newItem: ShoppingItemDto = {
     name: "",
@@ -71,8 +74,11 @@ export class ShoppingListComponent implements OnInit {
 
       if (maybeList) {
         this.shoppingList = maybeList;
-        this.deadlineInDate = this.shoppingList.deadline?.toDate()!;
         this.dataSource.data = this.shoppingList.items;
+
+        // Set the properties for editing purposes
+        this.deadlineInDate = this.shoppingList.deadline?.toDate()!;
+        this.newShoppingListName = this.shoppingList.name;
       }
     });
   }
@@ -109,6 +115,26 @@ export class ShoppingListComponent implements OnInit {
 
   public removeItem(index: number): void {
     this.shoppingListsService.removeShoppingListItem(this.shoppingListId!, index);
+  }
+
+  public editShoppingListName(): void {
+    if (this.newShoppingListName === this.shoppingList.name) {
+      this.showSnackbar("The provided name is the same as the previous value");
+      return;
+    }
+
+    this.shoppingListsService.updateShoppingListName(this.shoppingListId!, this.newShoppingListName);
+  }
+
+  public editShoppingDeadline(): void {
+    const newDeadline = Timestamp.fromDate(this.deadlineInDate);
+
+    if (newDeadline.seconds === this.shoppingList.deadline?.seconds) {
+      this.showSnackbar("The provided deadline is the same as the previous value");
+      return;
+    }
+
+    this.shoppingListsService.updateShoppingListDeadline(this.shoppingListId!, newDeadline);
   }
 
 }

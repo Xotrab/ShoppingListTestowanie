@@ -5,9 +5,9 @@
                 <mat-label>
                     Shopping list name
             </mat-label>
-            <input matInput  [(ngModel)]="shoppingList.name">
+            <input matInput  [(ngModel)]="newShoppingListName">
             </mat-form-field>
-            <button mat-raised-button color="primary" class="action-btn">
+            <button mat-raised-button color="primary" class="action-btn" (click)="editShoppingListName()">
                 Update name
             </button>
         </div>
@@ -22,11 +22,11 @@
                 <mat-datepicker-toggle matSuffix [for]="$any(pickerFrom)"></mat-datepicker-toggle>
                 <ngx-mat-datetime-picker #pickerFrom [hideTime]="true"></ngx-mat-datetime-picker>
             </mat-form-field>
-            <button mat-raised-button color="primary" class="action-btn">
+            <button mat-raised-button color="primary" class="action-btn" (click)="editShoppingDeadline()">
                 Update deadline
             </button>
         </div>
-        <button mat-raised-button class="action-btn" [routerLink]="['/home']">
+        <button mat-raised-button style="margin-top: 0.5rem;" class="action-btn" [routerLink]="['/home']">
             Back
         </button>
     </div>
