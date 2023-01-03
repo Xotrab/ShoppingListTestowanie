@@ -10,10 +10,12 @@
 
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 2rem;
 
         .action-btn {
             margin-bottom: 1rem;
+            margin-left: 1.5rem;
         }
     }
 
