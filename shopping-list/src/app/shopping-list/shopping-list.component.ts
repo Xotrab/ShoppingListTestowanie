@@ -58,7 +58,7 @@ export class ShoppingListComponent implements OnInit {
 
   public shoppingListId!: string;
 
-  public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit', 'remove'];
+  public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit', 'remove', 'edit'];
 
   public dataSource = new MatTableDataSource<ShoppingItemDto>();
   
@@ -136,5 +136,9 @@ export class ShoppingListComponent implements OnInit {
 
     this.shoppingListsService.updateShoppingListDeadline(this.shoppingListId!, newDeadline);
   }
+
+  // public updateItemPurchaseStatus(index: number): void {
+  //   this.shoppingListsService.updateItemPurchaseStatus(this.shoppingListId!, index);
+  // }
 
 }

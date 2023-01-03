@@ -85,6 +85,12 @@
     </h2>
     <mat-card style="padding: 0;">
         <table mat-table [dataSource]="dataSource">
+            <!-- <ng-container matColumnDef="purchased">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element; let i=index">
+                <mat-checkbox [(ngModel)]="element.purchased" (change)="updateItemPurchaseStatus(i)"></mat-checkbox>
+              </td>
+            </ng-container> -->
             <ng-container matColumnDef="position">
               <th mat-header-cell *matHeaderCellDef> No. </th>
               <td [class.cross-out]="element.purchased" mat-cell *matCellDef="let element; let i=index"> {{i+1}} </td>
@@ -108,9 +114,17 @@
                         Remove
                     </button>
                 </td>
-              </ng-container>
+            </ng-container>
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let i=index;">
+                    <button mat-stroked-button>
+                        Edit
+                    </button>
+                </td>
+            </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr ngClass="strikeout" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="strikeout" mat-row *matRowDef="let element; let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell" [attr.colspan]="displayedColumns.length">
                   No items have been added yet

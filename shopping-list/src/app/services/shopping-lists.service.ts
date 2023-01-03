@@ -177,4 +177,23 @@ export class ShoppingListsService {
         this.showSnackbar("Error occured while updating the shopping list deadline");
       });
    }
+
+   public updateItemPurchaseStatus(listId: string, itemIndex: number): void {
+    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
+
+    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
+    const itemsToUpdate = [...listToUpdate.items];
+
+    itemsToUpdate[itemIndex].purchased = ! itemsToUpdate[itemIndex].purchased;
+
+    updateDoc(shoppingListRef, {items: itemsToUpdate})
+      .then(() => {
+        listToUpdate.items = itemsToUpdate;
+        this.shoppingLists.next(this.shoppingLists.value);
+        this.showSnackbar("The item purchase status has been successfully updated");
+      })
+      .catch(_ => {
+        this.showSnackbar("Error occured while updating the item purchase status");
+      });
+   }
 }

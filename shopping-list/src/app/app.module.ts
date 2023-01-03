@@ -29,6 +29,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     MatRadioModule,
     MatSelectModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]
