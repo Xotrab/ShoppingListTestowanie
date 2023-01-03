@@ -22,14 +22,14 @@ const CUSTOM_DATE_FORMAT: NgxMatDateFormats = {
 };
 
 @Component({
-  selector: 'app-creator',
-  templateUrl: './creator.component.html',
-  styleUrls: ['./creator.component.scss'],
+  selector: 'app-shopping-list',
+  templateUrl: './shopping-list.component.html',
+  styleUrls: ['./shopping-list.component.scss'],
   providers: [
     {provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT}
   ]
 })
-export class CreatorComponent implements OnInit {
+export class ShoppingListComponent implements OnInit {
   public itemMode = ItemMode;
   public selectedMode: ItemMode = this.itemMode.Common;
 
