@@ -21,6 +21,20 @@
 
     table {
         width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        position: relative;
+    }
+    
+    tr.strikeout td.cross-out:before {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        border-bottom: 1px solid darkgray;
+        width: 100%;
     }
 
     .mat-column-remove {
@@ -34,6 +48,7 @@
     .mat-column-item {
         width: 40%;
     }
+    
 
     &__card-input-row {
         display: flex;
