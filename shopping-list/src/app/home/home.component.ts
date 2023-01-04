@@ -54,7 +54,11 @@ export class HomeComponent implements OnInit {
   }
 
   public removeShoppingList(id: string): void {
-    this.shoppingListsService.removeShoppingList(id);
+    this.shoppingListsService.removeShoppingList(id).subscribe({
+      error: () => {
+        this.showSnackbar("Error occured while removing the shopping list");
+      }
+    });
   }
 
   public showSnackbar(message: string): void {

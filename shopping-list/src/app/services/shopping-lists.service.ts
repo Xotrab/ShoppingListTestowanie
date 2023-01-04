@@ -73,6 +73,12 @@ export class ShoppingListsService {
     return defer(() => deleteObject(imageRef));
   }
 
+  public removeImages(ids: string[]): Observable<void> {
+    return ids.length === 0 ? of(void 0) : forkJoin([
+      ...ids.map(id => this.removeImage(id))
+    ]).pipe(map(() => {}));
+  }
+
   getImageUrl(documentPath: string): Observable<string> {
     const imageRef = ref(this.storage, documentPath);
 
@@ -119,19 +125,24 @@ export class ShoppingListsService {
       });
    }
 
-   public removeShoppingList(id: string): void {
+   public removeShoppingList(id: string): Observable<void> {
     const shoppingListRef = doc(this.firestore, this.collectionName, id);
+
+    const imagePathsToRemove: string[] = this.shoppingLists.value
+      .find(list => list.id === id)!.items
+      .map(item => item.imageData)
+      .filter(ImageData => ImageData !== null)
+      .map(ImageData => ImageData?.documentPath!);
     
-    deleteDoc(shoppingListRef)
-      .then(() => {
+    return defer(() => deleteDoc(shoppingListRef)).pipe(
+      switchMap(() => this.removeImages(imagePathsToRemove)),
+      tap(() => {
         let shoppingLists = this.shoppingLists.value;
         shoppingLists = shoppingLists.filter(shoppingList => shoppingList.id !== id);
 
         this.shoppingLists.next(shoppingLists);
       })
-      .catch(_ => {
-        this.showSnackbar("Error occured while removing the shopping list");
-      });
+    );
    }
 
    public addShoppingListItem(listId: string, newItem: ShoppingItemDto, image: File | null): Observable<void> {
