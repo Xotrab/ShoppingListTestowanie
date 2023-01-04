@@ -1,8 +1,10 @@
+import { ImageDataDto } from "./image-data-dto";
+
 export interface ShoppingItemDto {
 	name: string;
 	quantity: number | null;
 	unit: string;
-	imageId: string | null;
+	imageData: ImageDataDto | null;
 	purchased: boolean;	
 };
 

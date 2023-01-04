@@ -29,6 +29,14 @@
         border-radius: 0.25rem;
     }
 
+    .table-image {
+        width: 7.5rem;
+        height: 7.5rem;
+
+        border-radius: 0.25rem; 
+        margin-top: 0.5rem;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -54,16 +62,12 @@
         width: 10%;
     }
 
-    // .mat-column-purchased {
-    //     width: 10%;
-    // }
-
     .mat-column-position {
         width: 10%;
     }
 
     .mat-column-item {
-        width: 40%;
+        width: 20%;
     }
     
 
@@ -77,4 +81,14 @@
             margin-top: 0.25rem;
         }
     }
+}
+
+.spinner {
+    position: absolute;
+    align-self: center;
+    margin-top: 2rem;
+}
+
+.margin {
+    margin-top: 12rem;
 }

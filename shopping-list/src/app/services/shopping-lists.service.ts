@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CollectionReference, deleteDoc, doc, Firestore, getDocs, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
-import { ref, Storage, uploadBytes, UploadMetadata } from '@angular/fire/storage';
+import { deleteObject, getDownloadURL, ref, Storage, uploadBytes, UploadMetadata } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { addDoc, collection } from '@firebase/firestore';
-import { BehaviorSubject, defer, filter, map, Observable } from 'rxjs';
+import { BehaviorSubject, defer, filter, forkJoin, from, iif, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ShoppingListDto } from '../dtos/shopping-list-dto';
 import { AuthService } from './auth.service';
 import { uuidv4 } from '@firebase/util';
 import { ShoppingItemDto } from '../dtos/shopping-item-dto';
+import { ImageDataDto } from '../dtos/image-data-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -45,15 +46,37 @@ export class ShoppingListsService {
     });
    }
 
-   public uploadImage(image: File) {
+   public uploadImage(image: File): Observable<ImageDataDto> {
     const uuid = uuidv4();
-    const storageRef = ref(this.storage, `images/${this.userId}/${uuid}`);
+    const documentPath = `images/${this.userId}/${uuid}`;
+
+    const imageRef = ref(this.storage, documentPath);
 
     const metadata: UploadMetadata  = {
       contentType: image.type,
     };
 
-    return defer(() => uploadBytes(storageRef, image, metadata)).pipe(map(() => uuid));
+    return defer(() => uploadBytes(imageRef, image, metadata)).pipe(
+      switchMap(_ => this.getImageUrl(documentPath)),
+      map(url => {
+        return {
+          documentPath: documentPath,
+          imageUrl: url
+        } as ImageDataDto;
+      })
+    );
+  }
+
+  public removeImage(imagePath: string): Observable<void> {
+    const imageRef = ref(this.storage, imagePath);
+
+    return defer(() => deleteObject(imageRef));
+  }
+
+  getImageUrl(documentPath: string): Observable<string> {
+    const imageRef = ref(this.storage, documentPath);
+
+    return defer(() => getDownloadURL(imageRef));
   }
 
    public showSnackbar(message: string): void {
@@ -111,39 +134,57 @@ export class ShoppingListsService {
       });
    }
 
-   public addShoppingListItem(listId: string, newItem: ShoppingItemDto): void {
-    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
+   public addShoppingListItem(listId: string, newItem: ShoppingItemDto, image: File | null): Observable<void> {
+    return iif(
+      () => image !== null,
+      defer(() => this.uploadImage(image!)), 
+      defer(() => of(null))
+    )
+    .pipe(
+      switchMap(result => {
+        newItem.imageData = result;
 
-    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
-    const updatedItems = [...listToUpdate.items, newItem];
+        const shoppingListRef = doc(this.firestore, this.collectionName, listId);
 
-    updateDoc(shoppingListRef, {items: updatedItems})
-      .then(() => {
-        listToUpdate.items = updatedItems;
-        this.shoppingLists.next(this.shoppingLists.value); 
+        const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
+        const updatedItems = [...listToUpdate.items, newItem];
+
+        return from(updateDoc(shoppingListRef, {items: updatedItems}))
+          .pipe(
+            tap(() => {
+              listToUpdate.items = updatedItems;
+              this.shoppingLists.next(this.shoppingLists.value);
+            })
+          )
       })
-      .catch(_ => {
-        this.showSnackbar("Error occured while adding the shopping list item");
-      });
+    );
+
    }
 
-   public removeShoppingListItem(listId: string, itemIndex: number): void {
+   public removeShoppingListItem(listId: string, itemIndex: number): Observable<void> {
     const shoppingListRef = doc(this.firestore, this.collectionName, listId);
 
     const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
 
     let updatedItems = [...listToUpdate.items];
 
+    const itemToBeRemoved = {...listToUpdate.items[itemIndex]};
+
     updatedItems.splice(itemIndex, 1);
 
-    updateDoc(shoppingListRef, {items: updatedItems})
-      .then(() => {
+    const observables = [defer(() => updateDoc(shoppingListRef, {items: updatedItems}))];
+
+    if (itemToBeRemoved.imageData) {
+      observables.push(this.removeImage(itemToBeRemoved.imageData.documentPath));
+    }
+
+    return forkJoin(observables).pipe(
+      tap(() => {
         listToUpdate.items = updatedItems;
-        this.shoppingLists.next(this.shoppingLists.value); 
-      })
-      .catch(_ => {
-        this.showSnackbar("Error occured while removing the shopping list item");
-      });
+        this.shoppingLists.next(this.shoppingLists.value);
+      }),
+      map(() => {})
+    );
    }
 
    public updateShoppingListName(listId: string, newName: string) : void {

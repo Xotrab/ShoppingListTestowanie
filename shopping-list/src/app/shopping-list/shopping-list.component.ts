@@ -52,15 +52,18 @@ export class ShoppingListComponent implements OnInit {
     name: "",
     quantity: null,
     unit: "",
-    imageId: null,
+    imageData: null,
     purchased: false
   };
 
   public uploadedImagePreviewUrl!: string | null;
+  public uploadedFile: File | null = null;
+
+  public showSpinner: boolean = false;
 
   public shoppingListId!: string;
 
-  public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit', 'remove', 'edit'];
+  public displayedColumns: string[] = ['position', 'item', 'quantity', 'unit','image', 'remove', 'edit'];
 
   public dataSource = new MatTableDataSource<ShoppingItemDto>();
   
@@ -87,6 +90,8 @@ export class ShoppingListComponent implements OnInit {
 
   public onImageSelected(event: any): void {
     if (event.target.files && event.target.files[0]) {
+      this.uploadedFile = event.target.files[0];
+
       var reader = new FileReader();
       reader.onload = (event: any) => {
           this.uploadedImagePreviewUrl = event.target.result;
@@ -98,6 +103,7 @@ export class ShoppingListComponent implements OnInit {
 
   public removeImage(): void {
     this.uploadedImagePreviewUrl = null;
+    this.uploadedFile = null;
   }
 
   public resetShoppingItemName(): void {
@@ -118,20 +124,36 @@ export class ShoppingListComponent implements OnInit {
       this.showSnackbar("The provided input for the new item is invalid");
       return;
     }
-    
-    this.shoppingListsService.addShoppingListItem(this.shoppingList.id!, {...this.newItem});
 
-    this.newItem = {
-      name: "",
-      quantity: null,
-      unit: "",
-      imageId: null,
-      purchased: false
-    };
+    this.showSpinner = true;
+
+    this.shoppingListsService.addShoppingListItem(this.shoppingList.id!, {...this.newItem}, this.uploadedFile).subscribe({
+      next: () => {
+        this.showSpinner = false;
+
+        this.newItem = {
+          name: "",
+          quantity: null,
+          unit: "",
+          imageData: null,
+          purchased: false
+        };
+
+        this.removeImage();
+      },
+      error: () => {
+        this.showSpinner = false;
+        this.showSnackbar("Error occured while adding the shopping list item");
+      }
+    });
   }
 
   public removeItem(index: number): void {
-    this.shoppingListsService.removeShoppingListItem(this.shoppingListId!, index);
+    this.shoppingListsService.removeShoppingListItem(this.shoppingListId!, index).subscribe({
+      error: () => {
+        this.showSnackbar("Error occured while removing the shopping list item");
+      }
+    });
   }
 
   public editShoppingListName(): void {
