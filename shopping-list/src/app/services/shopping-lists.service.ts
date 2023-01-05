@@ -198,6 +198,50 @@ export class ShoppingListsService {
     );
    }
 
+   public updateShoppingListItem(listId: string, itemIndex: number, updatedItem: ShoppingItemDto, removeOldImg: boolean, uploadNewImg: boolean, image: File): Observable<void> {
+    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
+
+    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
+
+    let updatedItems = [...listToUpdate.items];
+
+    const observables = [];
+
+    if (removeOldImg) {
+      observables.push(this.removeImage(updatedItem.imageData?.documentPath!));
+      updatedItem.imageData = null;
+    }
+
+    const maybeUploadThenUpdate = 
+      iif(
+        () => uploadNewImg,
+        defer(() => this.uploadImage(image!)), 
+        defer(() => of(null))
+      )
+      .pipe(
+        switchMap(result => {
+          if (result) {
+            updatedItem.imageData = result;
+          }
+          
+          updatedItems[itemIndex] = updatedItem;
+
+          return from(updateDoc(shoppingListRef, {items: updatedItems}));
+        })
+      );
+
+      observables.push(maybeUploadThenUpdate);
+
+      return forkJoin(observables).pipe(
+        tap(() => {
+          listToUpdate.items = updatedItems;
+          this.shoppingLists.next(this.shoppingLists.value);
+        }),
+        map(() => {})
+      );
+
+   }
+
    public updateShoppingListName(listId: string, newName: string) : void {
     const shoppingListRef = doc(this.firestore, this.collectionName, listId);
 
@@ -227,25 +271,6 @@ export class ShoppingListsService {
       })
       .catch(_ => {
         this.showSnackbar("Error occured while updating the shopping list deadline");
-      });
-   }
-
-   public updateItemPurchaseStatus(listId: string, itemIndex: number): void {
-    const shoppingListRef = doc(this.firestore, this.collectionName, listId);
-
-    const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
-    const itemsToUpdate = [...listToUpdate.items];
-
-    itemsToUpdate[itemIndex].purchased = ! itemsToUpdate[itemIndex].purchased;
-
-    updateDoc(shoppingListRef, {items: itemsToUpdate})
-      .then(() => {
-        listToUpdate.items = itemsToUpdate;
-        this.shoppingLists.next(this.shoppingLists.value);
-        this.showSnackbar("The item purchase status has been successfully updated");
-      })
-      .catch(_ => {
-        this.showSnackbar("Error occured while updating the item purchase status");
       });
    }
 }

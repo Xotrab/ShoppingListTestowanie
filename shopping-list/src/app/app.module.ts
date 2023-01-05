@@ -30,6 +30,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { EditItemDialogComponent } from './edit-item-dialog/edit-item-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     LoginComponent,
     HomeComponent,
     ShoppingListComponent,
-    FromFirebaseDatePipe
+    FromFirebaseDatePipe,
+    EditItemDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +91,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatListModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

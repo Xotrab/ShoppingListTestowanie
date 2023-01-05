@@ -1,12 +1,15 @@
 import { NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { COMMONLY_USED_ITEMS, DEFAULT_UNITS, ShoppingItemDto } from '../dtos/shopping-item-dto';
 import { ShoppingListDto } from '../dtos/shopping-list-dto';
+import { EditItemDialogComponent } from '../edit-item-dialog/edit-item-dialog.component';
+import { EditDialogData } from '../helpers/edit-dialog-data';
 import { ItemMode } from '../helpers/item-mode.enum';
 import { ShoppingListsService } from '../services/shopping-lists.service';
 
@@ -70,7 +73,8 @@ export class ShoppingListComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private shoppingListsService: ShoppingListsService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private dialog: MatDialog) { }
 
   public ngOnInit(): void {
     this.shoppingListId = this.route.snapshot.paramMap.get('id')!;
@@ -176,8 +180,17 @@ export class ShoppingListComponent implements OnInit {
     this.shoppingListsService.updateShoppingListDeadline(this.shoppingListId!, newDeadline);
   }
 
-  // public updateItemPurchaseStatus(index: number): void {
-  //   this.shoppingListsService.updateItemPurchaseStatus(this.shoppingListId!, index);
-  // }
+  public openEditDialog(index: number): void {
+
+    this.dialog.open(EditItemDialogComponent, { 
+      disableClose: true,
+      autoFocus: false,
+      data: {
+        listId: this.shoppingListId,
+        itemIndex: index,
+        item: {...this.shoppingList.items[index]}
+      } as EditDialogData
+    });
+  }
 
 }
