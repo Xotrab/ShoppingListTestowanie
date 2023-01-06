@@ -1,0 +1,36 @@
+.dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .image-preview {
+        width: 15rem;
+        height: 15rem;
+
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+
+        border-radius: 0.25rem;
+    }
+
+    &__input-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+
+        .input {
+            width: 15rem;
+            margin-top: 0.25rem;
+        }
+    }
+}
+
+.spinner {
+    position: absolute;
+    align-self: center;
+    margin-top: 7rem;
+}
+
+.margin {
+    margin-top: 15rem;
+}

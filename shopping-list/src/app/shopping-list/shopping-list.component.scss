@@ -1,0 +1,94 @@
+.creator-container {
+    display: flex;
+    flex-direction: column;
+
+    margin: 5rem 30rem;
+
+    &__header-data {
+        margin-bottom: 0.5rem;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+
+        .action-btn {
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+    }
+
+    .image-preview {
+        width: 15rem;
+        height: 15rem;
+
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+
+        border-radius: 0.25rem;
+    }
+
+    .table-image {
+        width: 7.5rem;
+        height: 7.5rem;
+
+        border-radius: 0.25rem; 
+        margin-top: 0.5rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        position: relative;
+    }
+    
+    tr.strikeout td.cross-out:before {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        border-bottom: 1px solid darkgray;
+        width: 100%;
+    }
+
+    .mat-column-remove {
+        width: 10%;
+    }
+    .mat-column-edit {
+        width: 10%;
+    }
+
+    .mat-column-position {
+        width: 10%;
+    }
+
+    .mat-column-item {
+        width: 20%;
+    }
+    
+
+    &__card-input-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        .input {
+            width: 15rem;
+            margin-top: 0.25rem;
+        }
+    }
+}
+
+.spinner {
+    position: absolute;
+    align-self: center;
+    margin-top: 2rem;
+}
+
+.margin {
+    margin-top: 12rem;
+}

@@ -1,0 +1,43 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin: 5rem 30rem;
+
+    &__creator {
+        margin-bottom: 0.5rem;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        .create-btn {
+            margin-bottom: 1rem;
+        }
+    }
+    
+
+    mat-card {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .mat-column-action {
+        width: 22%;
+    }
+
+    .mat-column-position {
+        width: 10%;
+    }
+
+    .mat-column-name {
+        width: 40%;
+    }
+
+}
