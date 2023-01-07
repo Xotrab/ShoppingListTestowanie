@@ -12,7 +12,7 @@
                         <mat-icon>email</mat-icon>
                         Email address
                     </mat-label>
-                    <input matInput formControlName="email">
+                    <input matInput formControlName="email" id="email">
                     <mat-error>
                         Provide an email
                     </mat-error>
@@ -22,12 +22,12 @@
                         <mat-icon class="mat-icon-scaled-small">lock</mat-icon>
                         Password
                     </mat-label>
-                    <input matInput type="password" formControlName="password" autocomplete="off">
+                    <input matInput type="password" formControlName="password" autocomplete="off" id="password">
                     <mat-error>
                         Provide the password
                     </mat-error>
                 </mat-form-field>
-                <button mat-raised-button color="primary" type="submit">
+                <button mat-raised-button color="primary" type="submit" id="loginButton">
                     Login
                 </button>
                 <mat-progress-spinner *ngIf="showSpinner" class="spinner" color="accent" mode="indeterminate">
@@ -36,7 +36,7 @@
             <span>
                 No account?
             </span>
-            <button mat-raised-button [routerLink]="['/register']">
+            <button mat-raised-button (click)="navigateToRegister()" id="registerButton">
                 Register
             </button>
         </mat-card-content>
