@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ShoppingListDto } from '../dtos/shopping-list-dto';
@@ -42,7 +43,7 @@ export class HomeComponent implements OnInit {
 
   public deadlineInDate: Date | null = null;
 
-  constructor(private shoppingListsService: ShoppingListsService, private authService: AuthService, private snackBar: MatSnackBar) { }
+  constructor(private shoppingListsService: ShoppingListsService, private authService: AuthService, private snackBar: MatSnackBar, private router: Router) { }
 
   public ngOnInit(): void {
     this.shoppingListsService.shoppingLists$.subscribe(shoppingLists => this.dataSource.data = shoppingLists);
@@ -51,6 +52,10 @@ export class HomeComponent implements OnInit {
       filter(currentUser => currentUser !== null)
     )
     .subscribe(currentUser => this.shoppingList.userId = currentUser?.id!);
+  }
+
+  public navigateToDetails(listId: string): void {
+    this.router.navigate(['/shopping-list', listId]);
   }
 
   public removeShoppingList(id: string): void {
