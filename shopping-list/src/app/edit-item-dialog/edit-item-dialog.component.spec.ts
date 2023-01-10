@@ -203,7 +203,7 @@ fdescribe('EditItemDialogComponent', () => {
     expect(matDialogRefSpy.close).toHaveBeenCalled();
   });
 
-  it('should hide spinner and show snackBar on when update service call throws error', async () => {
+  it('should hide spinner and show snackBar when update service call throws error', async () => {
     shoppingListsServiceSpy.updateShoppingListItem.and.returnValue(throwError(() => new Error("Error occured")));
 
     const button = await loader.getHarness(MatButtonHarness.with({text: "Edit item"}));
