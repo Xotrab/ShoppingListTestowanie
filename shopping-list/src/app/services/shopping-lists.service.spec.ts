@@ -3,7 +3,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { connectFirestoreEmulator, enableIndexedDbPersistence, getFirestore, initializeFirestore, provideFirestore, Timestamp } from '@angular/fire/firestore';
 import { connectStorageEmulator, getStorage, provideStorage } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, lastValueFrom, map, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, map, of, switchMap, take, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApplicationUser } from '../dtos/application-user';
 import { ShoppingItemDto } from '../dtos/shopping-item-dto';
@@ -215,5 +215,94 @@ fdescribe('ShoppingListsService', () => {
     await lastValueFrom(service.removeShoppingList(updatedList.id));
 
     expect(updatedList.name).toBe(newName);
+  });
+
+  it('should update the shopping list deadline', async () => {
+    const newDeadline = new Timestamp(1000,0);
+
+    const user = await lastValueFrom(authServiceMock.currentUser$.pipe(take(1)));
+
+    const newShoppingList: ShoppingListDto = {
+      name: "test-list-to-update-name",
+      deadline: Timestamp.fromDate(new Date()),
+      userId: user.id,
+      items: []
+    };
+
+    const updatedList = await lastValueFrom(service.createShoppingList(newShoppingList).pipe(
+      switchMap(listId => service.updateShoppingListDeadline(listId, newDeadline).pipe(
+        map(() => listId)
+      )),
+      switchMap(listId => service.shoppingLists$.pipe(
+        take(1),
+        map(shoppingLists => shoppingLists.find(shoppingList => shoppingList.id === listId))
+      ))
+    ));
+
+    await lastValueFrom(service.removeShoppingList(updatedList.id));
+
+    expect(updatedList.deadline.seconds).toBe(newDeadline.seconds);
+    expect(updatedList.deadline.nanoseconds).toBe(newDeadline.nanoseconds);
+  });
+
+  it('should upload new image', async () => {
+    const file = new File([], "filename");
+
+    service.userId = await lastValueFrom(authServiceMock.currentUser$.pipe(
+      take(1),
+      map(user => user.id)
+    ));
+
+    const imageData = await lastValueFrom(service.uploadImage(file));
+
+    await lastValueFrom(service.removeImage(imageData.documentPath));
+
+    expect(imageData.imageUrl).toBeTruthy();
+  });
+
+  it('should update shopping list item', async () => {
+    const file = new File([], "filename");
+
+    service.userId = await lastValueFrom(authServiceMock.currentUser$.pipe(
+      take(1),
+      map(user => user.id)
+    ));
+
+    const newShoppingList: ShoppingListDto = {
+      name: "test-list-to-update-name",
+      deadline: Timestamp.fromDate(new Date()),
+      userId: service.userId,
+      items: []
+    };
+
+    const newItem: ShoppingItemDto = {
+      name: "add-test",
+      quantity: 1,
+      unit: "kg",
+      imageData: null,
+      purchased: false
+    };
+
+    const updatedList = await lastValueFrom(service.createShoppingList(newShoppingList).pipe(
+      switchMap(listId => service.addShoppingListItem(listId, newItem, file).pipe(
+        map(() => listId)
+      )),
+      switchMap(listId => service.shoppingLists$.pipe(
+        take(1),
+        map(shoppingLists => shoppingLists.find(shoppingList => shoppingList.id === listId))
+      )),
+      switchMap(shoppingList=> service.updateShoppingListItem(shoppingList.id, 0, {...shoppingList.items[0], name: "updated-name"}, true, false, null).pipe(
+        map(() => shoppingList.id)
+      )),
+      switchMap(listId => service.shoppingLists$.pipe(
+        take(1),
+        map(shoppingLists => shoppingLists.find(shoppingList => shoppingList.id === listId))
+      ))
+    ));
+
+    await lastValueFrom(service.removeShoppingList(updatedList.id));
+
+    expect(updatedList.items[0].name).toBe("updated-name");
+    expect(updatedList.items[0].imageData).toBe(null);
   });
 });

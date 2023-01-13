@@ -18,7 +18,7 @@ export class ShoppingListsService {
   private readonly collectionName = "shopping-lists";
   private shoppingListsCollectionRef: CollectionReference<ShoppingListDto>;
 
-  private userId: string | undefined;
+  public userId: string | undefined;
 
   private shoppingLists = new BehaviorSubject<ShoppingListDto[]>([]);
   get shoppingLists$(): Observable<ShoppingListDto[]> {
