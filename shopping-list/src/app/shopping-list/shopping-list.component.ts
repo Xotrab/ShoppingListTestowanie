@@ -4,7 +4,7 @@ import { Timestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { COMMONLY_USED_ITEMS, DEFAULT_UNITS, ShoppingItemDto } from '../dtos/shopping-item-dto';
 import { ShoppingListDto } from '../dtos/shopping-list-dto';
@@ -74,7 +74,8 @@ export class ShoppingListComponent implements OnInit {
     private snackBar: MatSnackBar,
     private shoppingListsService: ShoppingListsService,
     private route: ActivatedRoute,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private router: Router) { }
 
   public ngOnInit(): void {
     this.shoppingListId = this.route.snapshot.paramMap.get('id')!;
@@ -90,6 +91,10 @@ export class ShoppingListComponent implements OnInit {
         this.newShoppingListName = this.shoppingList.name;
       }
     });
+  }
+
+  public navigateToHome(): void {
+    this.router.navigate(['/home']);
   }
 
   public onImageSelected(event: any): void {
@@ -124,7 +129,7 @@ export class ShoppingListComponent implements OnInit {
   }
 
   public addItem(): void {
-    if (!this.newItem.name || !this.newItem.quantity || !this.newItem.unit || this.newItem.unit.includes("-")) {
+    if (!this.newItem.name || !this.newItem.quantity || !this.newItem.unit) {
       this.showSnackbar("The provided input for the new item is invalid");
       return;
     }
@@ -166,7 +171,11 @@ export class ShoppingListComponent implements OnInit {
       return;
     }
 
-    this.shoppingListsService.updateShoppingListName(this.shoppingListId!, this.newShoppingListName);
+    this.shoppingListsService.updateShoppingListName(this.shoppingListId!, this.newShoppingListName).subscribe({
+      error: () => {
+        this.showSnackbar("The shopping list name has been successfully updated");
+      }
+    });
   }
 
   public editShoppingDeadline(): void {
@@ -177,7 +186,11 @@ export class ShoppingListComponent implements OnInit {
       return;
     }
 
-    this.shoppingListsService.updateShoppingListDeadline(this.shoppingListId!, newDeadline);
+    this.shoppingListsService.updateShoppingListDeadline(this.shoppingListId!, newDeadline).subscribe({
+      error: () => {
+        this.showSnackbar("Error occured while updating the shopping list deadline");
+      }
+    });
   }
 
   public openEditDialog(index: number): void {

@@ -12,7 +12,7 @@
                         <mat-icon>email</mat-icon>
                         Email address
                     </mat-label>
-                    <input matInput formControlName="email">
+                    <input matInput formControlName="email" id="email">
                     <mat-error>
                         Provide an email
                     </mat-error>
@@ -22,7 +22,7 @@
                         <mat-icon class="mat-icon-scaled-big">person</mat-icon>
                         Username
                     </mat-label>
-                    <input matInput type="text" formControlName="username">
+                    <input matInput type="text" formControlName="username" id="username">
                     <mat-error>
                         Username has to have between 2 and 20 characters
                     </mat-error>
@@ -32,7 +32,7 @@
                         <mat-icon class="mat-icon-scaled-small">lock</mat-icon>
                         Password
                     </mat-label>
-                    <input matInput type="password" formControlName="password" autocomplete="off">
+                    <input matInput type="password" formControlName="password" autocomplete="off" id="password">
                     <mat-error>
                          Provide at least one digit, one lower and upper case letter and between 5 to 25 characters
                     </mat-error>
@@ -42,12 +42,12 @@
                         <mat-icon class="mat-icon-scaled-small">lock</mat-icon>
                         Confirm password
                     </mat-label>
-                    <input matInput type="password" formControlName="confirmPassword" autocomplete="off" [errorStateMatcher]="passwordStateMatcher">
+                    <input matInput type="password" formControlName="confirmPassword" autocomplete="off" [errorStateMatcher]="passwordStateMatcher" id="confirmPassword">
                     <mat-error *ngIf="registerFormGroup.errors?.['passwordMismatch']">
                         Passwords do not match
                     </mat-error>
                 </mat-form-field>
-                <button mat-raised-button color="primary" type="submit">
+                <button mat-raised-button color="primary" type="submit" id="registerButton">
                     Register
                 </button>
                 <mat-progress-spinner *ngIf="showSpinner" class="spinner" color="accent" mode="indeterminate">
@@ -56,7 +56,7 @@
             <span>
                 Already have an account?
             </span>
-            <button mat-raised-button [routerLink]="['/']">
+            <button mat-raised-button (click)="navigateToLogin()" id="loginButton">
                 Login
             </button>
         </mat-card-content>

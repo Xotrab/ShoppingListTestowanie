@@ -45,7 +45,7 @@
                     <button mat-stroked-button color="warn" style="margin-right: 1rem;" (click)="removeShoppingList(element.id)">
                         Remove
                     </button>
-                    <button mat-stroked-button [routerLink]="['/shopping-list', element.id]">
+                    <button mat-stroked-button (click)="navigateToDetails(element.id)">
                         Details
                     </button>
                 </td>

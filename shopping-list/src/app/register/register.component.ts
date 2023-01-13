@@ -31,6 +31,10 @@ export class RegisterComponent implements OnInit {
   public ngOnInit(): void {
   }
 
+  public navigateToLogin(): void {
+    this.router.navigate(['/']);
+  }
+
   public submitForm(): void {
     if (this.registerFormGroup.invalid) {
       this.snackBar.open(

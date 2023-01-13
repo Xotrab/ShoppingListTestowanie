@@ -6,7 +6,7 @@
     <span>
       logged in as {{ (currentUser$ | async)?.username}}
     </span>
-    <button mat-raised-button (click)="logout()">
+    <button mat-raised-button (click)="logout()" id="logoutButton">
       Logout
     </button>
   </div>

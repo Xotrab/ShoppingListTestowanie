@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LoginDto } from '../dtos/login-dto';
 import { AuthService } from '../services/auth.service';
@@ -19,9 +20,13 @@ export class LoginComponent implements OnInit {
 
   public showSpinner: boolean = false;
 
-  constructor(private authService: AuthService, private snackBar: MatSnackBar) { }
+  constructor(private authService: AuthService, private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  public navigateToRegister(): void {
+    this,this.router.navigate(['/register']);
   }
 
   public submitForm(): void {

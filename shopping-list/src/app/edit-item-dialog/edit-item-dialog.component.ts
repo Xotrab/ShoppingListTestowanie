@@ -73,7 +73,7 @@ export class EditItemDialogComponent implements OnInit {
   }
 
   public edit(): void {
-    if (!this.editItem.name || !this.editItem.quantity || !this.editItem.unit || this.editItem.unit.includes("-")) {
+    if (!this.editItem.name || !this.editItem.quantity || !this.editItem.unit) {
       this.showSnackbar("The provided input for the new item is invalid");
       return;
     }

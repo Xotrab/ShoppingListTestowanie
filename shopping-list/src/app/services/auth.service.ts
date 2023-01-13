@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { BehaviorSubject, defer, from, map, Observable, Subscription, switchMap } from 'rxjs';
+import { off } from 'process';
+import { BehaviorSubject, defer, from, map, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { ApplicationUser } from '../dtos/application-user';
 import { LoginDto } from '../dtos/login-dto';
 import { RegisterDto } from '../dtos/register-dto';
@@ -77,7 +78,8 @@ export class AuthService {
       () => signInWithEmailAndPassword(this.auth, loginDto.email, loginDto.password)
     )
     .pipe(
-      switchMap(() => from(this.router.navigate(['home'])))
+      tap(() => this.router.navigate(['home'])),
+      switchMap(() => of(true))
     );
   }
 
@@ -86,7 +88,16 @@ export class AuthService {
       () => signOut(this.auth)
     )
     .pipe(
-      switchMap(() => from(this.router.navigate([''])))
+      switchMap(() => of(true))
     );
+  }
+
+  public deleteUser(): Observable<void> {
+    const currUser = this.auth.currentUser;
+
+    if (currUser !== null)
+      return from(currUser.delete());
+    
+      return of(void 0);
   }
 }
