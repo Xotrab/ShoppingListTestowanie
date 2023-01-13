@@ -55,7 +55,7 @@ fdescribe('HomeComponent', () => {
         }
       ]),
       removeShoppingList: (index) => throwError(() => new Error("Error occured")),
-      createShoppingList: (newShoppingList) => void 0
+      createShoppingList: (newShoppingList) => of("1234")
     }
 
     await TestBed.configureTestingModule({
@@ -123,7 +123,7 @@ fdescribe('HomeComponent', () => {
     expect(snackBarSpy.open).toHaveBeenCalled();
   });
 
-  it('should reset new shopping list fields after successfully creating the previous list', async () => {
+  it('should reset new shopping list fields after successfully creating the list', async () => {
     component.shoppingList.name = "sampleName";
     component.deadlineInDate = new Date();
 
@@ -134,6 +134,20 @@ fdescribe('HomeComponent', () => {
     expect(component.shoppingList.name).toBe("");
     expect(component.shoppingList.deadline).toBe(null);
     expect(component.deadlineInDate).toBeFalsy();
+  });
+
+  it('should showSnackBar when createtShoppingList service method throws error', async () => {
+    component.shoppingList.name = "sampleName";
+    component.deadlineInDate = new Date();
+
+    const button = await loader.getHarness(MatButtonHarness.with({text: "Create shopping list"}));
+
+    const createListSpy = spyOn(shoppingListsServiceMock, 'createShoppingList');
+    createListSpy.and.returnValue(throwError(() => new Error("Error occured")));
+
+    await button.click();
+    
+    expect(snackBarSpy.open).toHaveBeenCalled();
   });
 
   it('should show snackBar when removeShoppingList throws error', async () => {

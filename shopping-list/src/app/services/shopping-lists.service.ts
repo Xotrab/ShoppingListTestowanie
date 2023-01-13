@@ -4,7 +4,7 @@ import { deleteObject, getDownloadURL, ref, Storage, uploadBytes, UploadMetadata
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { addDoc, collection } from '@firebase/firestore';
 import { uuidv4 } from '@firebase/util';
-import { BehaviorSubject, defer, forkJoin, from, iif, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, defer, forkJoin, from, iif, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ImageDataDto } from '../dtos/image-data-dto';
 import { ShoppingItemDto } from '../dtos/shopping-item-dto';
@@ -92,16 +92,15 @@ export class ShoppingListsService {
     );
   }
 
-   public createShoppingList(newShoppingList: ShoppingListDto): void {
-    addDoc(this.shoppingListsCollectionRef, newShoppingList)
-      .then((doc) => {
-        newShoppingList.id = doc.id;
+   public createShoppingList(newShoppingList: ShoppingListDto): Observable<string> {
+    return defer(() => addDoc(this.shoppingListsCollectionRef, newShoppingList)).pipe(
+      map(doc => (doc.id)),
+      tap(id => {
+        newShoppingList.id = id;
         const shoppingLists = this.shoppingLists.value;
         this.shoppingLists.next([...shoppingLists, newShoppingList]);
       })
-      .catch(_ => {
-        this.showSnackbar("Error occured while creating the shopping list");
-      });
+    );
    }
 
    public getShoppingLists(): void {

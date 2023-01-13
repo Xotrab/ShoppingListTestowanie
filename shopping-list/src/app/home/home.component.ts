@@ -83,12 +83,17 @@ export class HomeComponent implements OnInit {
 
     this.shoppingList.deadline = Timestamp.fromDate(this.deadlineInDate!);
 
-    this.shoppingListsService.createShoppingList({...this.shoppingList});
-
-    // reset the fields after creating the new shopping list
-    this.shoppingList.name = "";
-    this.shoppingList.deadline = null;
-    this.deadlineInDate = null;
+    this.shoppingListsService.createShoppingList({...this.shoppingList}).subscribe({
+      next: () => {
+        // reset the fields after creating the new shopping list
+        this.shoppingList.name = "";
+        this.shoppingList.deadline = null;
+        this.deadlineInDate = null;
+      },
+      error: () => {
+        this.showSnackbar("Error occured while creating the shopping list");
+      }
+    });
   }
 
 }
