@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { connectAuthEmulator, getAuth, provideAuth } from '@angular/fire/auth';
+import { connectAuthEmulator, deleteUser, getAuth, provideAuth } from '@angular/fire/auth';
 import { initializeFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -46,7 +46,7 @@ fdescribe('AuthService', () => {
 
   it('should automatically log in the new user after a successfull register process', async () => {
     const registerDto: RegisterDto = {
-      email: `${uuidv4().slice(0.8)}@domain.com`,
+      email: `register-test@domain.com`,
       username: "testUsername",
       password: "Test1234",
       confirmPassword: "Test1234"
@@ -99,5 +99,17 @@ fdescribe('AuthService', () => {
     ));
 
     expect(isAuthenticated).toBe(false);
+  });
+
+  afterAll(async () => {
+    const loginDto: LoginDto = {
+      email: `register-test@domain.com`,
+      password: 'Test1234'
+    };
+
+    await lastValueFrom(service.logout().pipe(
+      switchMap(_ => service.login(loginDto)),
+      switchMap(() => service.deleteUser())
+    ));
   });
 });

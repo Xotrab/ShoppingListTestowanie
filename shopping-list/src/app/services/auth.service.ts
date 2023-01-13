@@ -91,4 +91,13 @@ export class AuthService {
       switchMap(() => of(true))
     );
   }
+
+  public deleteUser(): Observable<void> {
+    const currUser = this.auth.currentUser;
+
+    if (currUser !== null)
+      return from(currUser.delete());
+    
+      return of(void 0);
+  }
 }
