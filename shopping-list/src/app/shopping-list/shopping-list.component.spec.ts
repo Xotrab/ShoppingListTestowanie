@@ -36,7 +36,7 @@ fdescribe('ShoppingListComponent', () => {
   let fixture: ComponentFixture<ShoppingListComponent>;
 
   let shoppingListsMock: Partial<ShoppingListsService>;
-  let shoppingListsSubject: BehaviorSubject<ShoppingListDto[]>
+  let shoppingListsSubject: BehaviorSubject<ShoppingListDto[]>;
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
   let dialogSpy: jasmine.SpyObj<MatDialog>;
   let routerSpy: jasmine.SpyObj<Router>;
