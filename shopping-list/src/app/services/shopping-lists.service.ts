@@ -254,19 +254,18 @@ export class ShoppingListsService {
     );
    }
 
-   public updateShoppingListDeadline(listId: string, newDeadline: Timestamp) : void {
+   public updateShoppingListDeadline(listId: string, newDeadline: Timestamp) : Observable<boolean> {
     const shoppingListRef = doc(this.firestore, this.collectionName, listId);
 
     const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
 
-    updateDoc(shoppingListRef, {deadline: newDeadline})
-      .then(() => {
+    return defer(() => updateDoc(shoppingListRef, {deadline: newDeadline})).pipe(
+      map(() => true),
+      tap(() => {
         listToUpdate.deadline = newDeadline;
         this.shoppingLists.next(this.shoppingLists.value);
         this.showSnackbar("The shopping list deadline has been successfully updated");
       })
-      .catch(_ => {
-        this.showSnackbar("Error occured while updating the shopping list deadline");
-      });
+    );
    }
 }

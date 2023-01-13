@@ -78,7 +78,7 @@ fdescribe('ShoppingListComponent', () => {
       addShoppingListItem: () => of(void 0),
       removeShoppingListItem: () => of(void 0),
       updateShoppingListName: () => of(true),
-      updateShoppingListDeadline: () => void 0
+      updateShoppingListDeadline: () => of(true)
     };
 
     await TestBed.configureTestingModule({
@@ -347,7 +347,7 @@ fdescribe('ShoppingListComponent', () => {
     component.deadlineInDate = new Date(100000);
     component.shoppingList.deadline = Timestamp.fromDate(new Date(200000));
 
-    const UpdateDeadlineSpy = spyOn(shoppingListsMock, 'updateShoppingListDeadline');
+    const UpdateDeadlineSpy = spyOn(shoppingListsMock, 'updateShoppingListDeadline').and.returnValue(of(true));
 
     const button = await loader.getHarness(MatButtonHarness.with({text: "Update deadline"}));
 
@@ -355,6 +355,19 @@ fdescribe('ShoppingListComponent', () => {
 
     expect(snackBarSpy.open).not.toHaveBeenCalled();
     expect(UpdateDeadlineSpy).toHaveBeenCalled();
+  });
+
+  it('should open snackBar when updateShoppingListDeadline throws an error', async () => {
+    component.deadlineInDate = new Date(100000);
+    component.shoppingList.deadline = Timestamp.fromDate(new Date(200000));
+
+    const UpdateDeadlineSpy = spyOn(shoppingListsMock, 'updateShoppingListDeadline').and.returnValue(throwError(() => new Error("Error occured")));
+
+    const button = await loader.getHarness(MatButtonHarness.with({text: "Update deadline"}));
+
+    await button.click();
+
+    expect(snackBarSpy.open).toHaveBeenCalled();
   });
 
   it('should open edit dialog after clicking on edit button of a shopping list item in a table', async () => {

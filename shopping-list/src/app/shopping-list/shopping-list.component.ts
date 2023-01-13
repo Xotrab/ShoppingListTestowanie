@@ -186,7 +186,11 @@ export class ShoppingListComponent implements OnInit {
       return;
     }
 
-    this.shoppingListsService.updateShoppingListDeadline(this.shoppingListId!, newDeadline);
+    this.shoppingListsService.updateShoppingListDeadline(this.shoppingListId!, newDeadline).subscribe({
+      error: () => {
+        this.showSnackbar("Error occured while updating the shopping list deadline");
+      }
+    });
   }
 
   public openEditDialog(index: number): void {
