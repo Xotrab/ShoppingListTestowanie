@@ -77,7 +77,7 @@ fdescribe('ShoppingListComponent', () => {
       shoppingLists$: shoppingListsSubject.asObservable(),
       addShoppingListItem: () => of(void 0),
       removeShoppingListItem: () => of(void 0),
-      updateShoppingListName: () => void 0,
+      updateShoppingListName: () => of(true),
       updateShoppingListDeadline: () => void 0
     };
 
@@ -297,13 +297,26 @@ fdescribe('ShoppingListComponent', () => {
     component.newShoppingListName = "test2";
     component.shoppingList.name = "test";
 
-    const UpdateNameSpy = spyOn(shoppingListsMock, 'updateShoppingListName');
+    const UpdateNameSpy = spyOn(shoppingListsMock, 'updateShoppingListName').and.returnValue(of(true));
 
     const button = await loader.getHarness(MatButtonHarness.with({text: "Update name"}));
 
     await button.click();
 
     expect(UpdateNameSpy).toHaveBeenCalledWith("1", "test2");
+  });
+
+  it('should open snackBar when updateShoppingListName throws an error', async () => {
+    component.newShoppingListName = "test2";
+    component.shoppingList.name = "test";
+
+    const UpdateNameSpy = spyOn(shoppingListsMock, 'updateShoppingListName').and.returnValue(throwError(() => new Error("Error occured")));
+
+    const button = await loader.getHarness(MatButtonHarness.with({text: "Update name"}));
+
+    await button.click();
+
+    expect(snackBarSpy.open).toHaveBeenCalled();
   });
 
   it('should reset editItem name property on radio button click', async () => {

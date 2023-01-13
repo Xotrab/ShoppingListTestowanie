@@ -171,7 +171,11 @@ export class ShoppingListComponent implements OnInit {
       return;
     }
 
-    this.shoppingListsService.updateShoppingListName(this.shoppingListId!, this.newShoppingListName);
+    this.shoppingListsService.updateShoppingListName(this.shoppingListId!, this.newShoppingListName).subscribe({
+      error: () => {
+        this.showSnackbar("The shopping list name has been successfully updated");
+      }
+    });
   }
 
   public editShoppingDeadline(): void {

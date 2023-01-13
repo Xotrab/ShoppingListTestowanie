@@ -239,20 +239,19 @@ export class ShoppingListsService {
 
    }
 
-   public updateShoppingListName(listId: string, newName: string) : void {
+   public updateShoppingListName(listId: string, newName: string) : Observable<boolean> {
     const shoppingListRef = doc(this.firestore, this.collectionName, listId);
 
     const listToUpdate = this.shoppingLists.value.find(list => list.id === listId)!;
 
-    updateDoc(shoppingListRef, {name: newName})
-      .then(() => {
+    return defer(() =>updateDoc(shoppingListRef, {name: newName})).pipe(
+      map(() => true),
+      tap(() => {
         listToUpdate.name = newName;
         this.shoppingLists.next(this.shoppingLists.value);
         this.showSnackbar("The shopping list name has been successfully updated");
       })
-      .catch(_ => {
-        this.showSnackbar("Error occured while updating the shopping list name");
-      });
+    );
    }
 
    public updateShoppingListDeadline(listId: string, newDeadline: Timestamp) : void {
