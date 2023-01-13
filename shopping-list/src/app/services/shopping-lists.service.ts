@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { CollectionReference, deleteDoc, doc, Firestore, getDocs, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
 import { deleteObject, getDownloadURL, ref, Storage, uploadBytes, UploadMetadata } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { addDoc, collection } from '@firebase/firestore';
-import { BehaviorSubject, defer, filter, forkJoin, from, iif, map, Observable, of, switchMap, tap } from 'rxjs';
+import { uuidv4 } from '@firebase/util';
+import { BehaviorSubject, defer, forkJoin, from, iif, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ImageDataDto } from '../dtos/image-data-dto';
+import { ShoppingItemDto } from '../dtos/shopping-item-dto';
 import { ShoppingListDto } from '../dtos/shopping-list-dto';
 import { AuthService } from './auth.service';
-import { uuidv4 } from '@firebase/util';
-import { ShoppingItemDto } from '../dtos/shopping-item-dto';
-import { ImageDataDto } from '../dtos/image-data-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +29,7 @@ export class ShoppingListsService {
     private firestore: Firestore,
     private storage: Storage,
     private authService: AuthService,
-    private snackBar: MatSnackBar,
-    private router: Router) {
+    private snackBar: MatSnackBar) {
     this.shoppingListsCollectionRef = collection(this.firestore, this.collectionName) as CollectionReference<ShoppingListDto>;
 
     this.authService.currentUser$.subscribe(currentUser => {
