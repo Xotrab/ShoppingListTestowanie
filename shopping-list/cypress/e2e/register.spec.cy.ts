@@ -1,17 +1,11 @@
 import { uuidv4 } from '@firebase/util';
-import { fillRegisterForm, preRegister } from './e2e-utils';
+import { fillRegisterForm, tryToLogout } from './e2e-utils';
 
-describe('Auth', () => {
+describe('Register', () => {
+    
     afterEach(() => {
         // Logout after each test (only if currently logged in)
-
-        cy.get('body').then(($body) => {
-            if ($body.find('#logoutButton').length > 0) {
-                cy.wait(2000);
-                cy.get('#logoutButton').click();
-                cy.wait(2000);
-            }
-        });
+        tryToLogout();
       })
 
     it('Should register and navigate to /home when provided form data was valid', () => {

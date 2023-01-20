@@ -7,10 +7,10 @@
           <mat-label>
               Shopping list name
           </mat-label>
-          <input matInput  [(ngModel)]="shoppingList.name">
+          <input id="nameInput" matInput  [(ngModel)]="shoppingList.name">
       </mat-form-field>
       <mat-form-field class="input">
-          <input matInput readonly [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline" [(ngModel)]="deadlineInDate">
+          <input id="deadlineInput" matInput readonly [ngxMatDatetimePicker]="pickerFrom" placeholder="Shopping deadline" [(ngModel)]="deadlineInDate">
           <mat-datepicker-toggle matSuffix [for]="$any(pickerFrom)"></mat-datepicker-toggle>
           <ngx-mat-datetime-picker #pickerFrom [hideTime]="true"></ngx-mat-datetime-picker>
       </mat-form-field>

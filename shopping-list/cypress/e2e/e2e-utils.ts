@@ -6,7 +6,14 @@ export function fillRegisterForm(email: string, username: string, password: stri
     cy.get('[formcontrolname="password"]').type(password);
     cy.get('[formcontrolname="confirmPassword"]').type(confirmPassword);
 
-    cy.get('[formcontrolname="username"]').click();
+    cy.get('[formcontrolname="email"]').click();
+}
+
+export function fillLoginForm(email: string, password: string) {
+    cy.get('[formcontrolname="email"]').type(email);
+    cy.get('[formcontrolname="password"]').type(password);
+
+    cy.get('[formcontrolname="email"]').click();
 }
 
 export function preRegister() {
@@ -18,10 +25,34 @@ export function preRegister() {
     const registerButton = cy.get("#registerButton");
     registerButton.click();
 
-    cy.wait(5000);
+    cy.wait(3000);
     
     return {
-        mail: `${id}@domain.com`,
+        email: `${id}@domain.com`,
         password: "Test1234"
     };
+}
+
+export function tryToLogout() {
+    cy.get('body').then(($body) => {
+        if ($body.find('#logoutButton').length > 0) {
+            cy.wait(2000);
+            cy.get('#logoutButton').click();
+            cy.wait(2000);
+        }
+    });
+}
+
+export function fillCreateListFields(id: string, deadline: string) {
+    cy.get("#nameInput").type(id);
+    cy.get("#deadlineInput").invoke('attr', 'readonly', false);
+    cy.get("#deadlineInput").type(deadline);
+    cy.wait(500);
+    cy.get("#nameInput").click();
+}
+
+export function formatDeadline(dateString: string): string {
+    const date = new Date(dateString);
+    
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 }
