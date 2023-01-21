@@ -78,7 +78,6 @@ export function removeList() {
 }
 
 export function fillAddItemFieldsForCommonItem(name: string, quantity: string, unit: string) {
-    // Open the mat select for item name and select water
     cy.get('#nameSelect').click();
     cy.get('mat-option').contains(name).click();
 
@@ -86,4 +85,23 @@ export function fillAddItemFieldsForCommonItem(name: string, quantity: string, u
 
     cy.get('#unitSelect').click();
     cy.get('mat-option').contains(unit).click();
+}
+
+export function fillAddItemFieldsForOwnItem(name: string, quantity: string, unit: string) {
+    cy.get('#nameInput').type(name);
+
+    cy.get('#quantityInput').type(quantity);
+
+    cy.get('#unitSelect').click();
+    cy.get('mat-option').contains(unit).click();
+}
+
+export function tryToRemoveItem() {
+    cy.get('body').then(($body) => {
+        if ($body.find(":contains('Remove')").length > 0) {
+            cy.wait(1000);
+            cy.get('button').contains("Remove").click();
+            cy.wait(1000);
+        }
+    });
 }
