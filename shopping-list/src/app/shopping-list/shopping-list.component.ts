@@ -173,7 +173,7 @@ export class ShoppingListComponent implements OnInit {
 
     this.shoppingListsService.updateShoppingListName(this.shoppingListId!, this.newShoppingListName).subscribe({
       error: () => {
-        this.showSnackbar("The shopping list name has been successfully updated");
+        this.showSnackbar("Error occured while updating the shopping list name");
       }
     });
   }

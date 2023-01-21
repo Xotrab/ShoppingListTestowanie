@@ -1,10 +1,10 @@
 import { uuidv4 } from '@firebase/util';
 
 export function fillRegisterForm(email: string, username: string, password: string, confirmPassword: string) {
-    cy.get('[formcontrolname="email"]').type(email);
-    cy.get('[formcontrolname="username"]').type(username);
-    cy.get('[formcontrolname="password"]').type(password);
-    cy.get('[formcontrolname="confirmPassword"]').type(confirmPassword);
+    cy.get('[formcontrolname="email"]').type(email, {force: true});
+    cy.get('[formcontrolname="username"]').type(username, {force: true});
+    cy.get('[formcontrolname="password"]').type(password, {force: true});
+    cy.get('[formcontrolname="confirmPassword"]').type(confirmPassword, {force: true});
 
     cy.get('[formcontrolname="email"]').click();
 }
@@ -55,4 +55,35 @@ export function formatDeadline(dateString: string): string {
     const date = new Date(dateString);
     
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+}
+
+export function createList() {
+    const id = uuidv4().slice(0,8);
+    const deadline = new Date().toDateString();
+    const createListButton = cy.get("button").contains("Create shopping list");
+
+    fillCreateListFields(id, deadline);
+
+    createListButton.click();
+
+    cy.wait(500);
+}
+
+export function removeList() {
+    cy.visit("/home");
+    const removeListButton = cy.get("button").contains("Remove");
+
+    removeListButton.click();
+    cy.wait(250);
+}
+
+export function fillAddItemFieldsForCommonItem(name: string, quantity: string, unit: string) {
+    // Open the mat select for item name and select water
+    cy.get('#nameSelect').click();
+    cy.get('mat-option').contains(name).click();
+
+    cy.get('#quantityInput').type(quantity);
+
+    cy.get('#unitSelect').click();
+    cy.get('mat-option').contains(unit).click();
 }
