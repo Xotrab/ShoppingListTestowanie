@@ -24,7 +24,7 @@ describe('Login', () => {
         cy.location({ timeout: 5000 })
             .should(loc => expect(loc.pathname).equal("/home"));
         
-        cy.contains("Logout");
+        cy.get("button").should('contain.text', "Logout");
     });
 
     it('should logout after login', () => {
@@ -49,7 +49,7 @@ describe('Login', () => {
         const loginButton = cy.get("#loginButton");
         loginButton.click();
 
-        cy.get("mat-error").contains("Provide an email");
+        cy.get("mat-error").should('contain.text', "Provide an email");
     });
 
     it('should show error when a password was not provided', () => {
@@ -58,7 +58,7 @@ describe('Login', () => {
         const loginButton = cy.get("#loginButton");
         loginButton.click();
 
-        cy.get("mat-error").contains("Provide an email");
+        cy.get("mat-error").should('contain.text', "Provide an email");
     });
 
     it('should show snackBar message when provided credentials were invalid', () => {
@@ -70,6 +70,6 @@ describe('Login', () => {
         loginButton.click();
 
         cy.wait(2000);
-        cy.get('.mat-simple-snack-bar-content').contains('Wrong credentials');
+        cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Wrong credentials');
     });
 });

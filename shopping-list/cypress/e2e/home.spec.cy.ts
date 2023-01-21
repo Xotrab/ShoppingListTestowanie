@@ -24,7 +24,8 @@ describe('Home', () => {
 
       const firstRow = cy.get('table').find('tbody').children("tr").eq(0);
 
-      firstRow.children("td").eq(1).contains(id);
+      firstRow.get("#nameCell").should('contain.text', id);
+      firstRow.get("#deadlineCell").should('contain.text', formatDeadline(deadline));
     });
 
     it('should remove a shopping list', () => {
@@ -35,7 +36,7 @@ describe('Home', () => {
 
       const noDataRow = cy.get('table').find('tbody').children("tr").eq(0);
 
-      noDataRow.children("td").eq(0).contains("No Shopping lists yet");
+      noDataRow.children("td").eq(0).should('contain.text', "No Shopping lists yet");
     });
 
     it('should show snackBar message when shopping list name was not provided', () => {
@@ -51,7 +52,7 @@ describe('Home', () => {
 
       cy.wait(250);
 
-      cy.get('.mat-simple-snack-bar-content').contains('Please provide the name and the deadline in order to create the shopping list');
+      cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Please provide the name and the deadline in order to create the shopping list');
 
       cy.wait(3000);
     });
@@ -68,6 +69,6 @@ describe('Home', () => {
 
       cy.wait(250);
 
-      cy.get('.mat-simple-snack-bar-content').contains('Please provide the name and the deadline in order to create the shopping list');
+      cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Please provide the name and the deadline in order to create the shopping list');
     });
 })

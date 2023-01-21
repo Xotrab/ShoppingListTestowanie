@@ -27,7 +27,7 @@ describe('Register', () => {
         const id = uuidv4().slice(0,8);
         fillRegisterForm("wrong@", `${id}Username`, "Test1234", "Test1234");
 
-        cy.get("mat-error").contains("Provide an email");
+        cy.get("mat-error").should('contain.text', "Provide an email");
     });
 
     it('Should show username error', () => {
@@ -36,7 +36,7 @@ describe('Register', () => {
         const id = uuidv4().slice(0,8);
         fillRegisterForm(`${id}@domain.com`, `u`, "Test1234", "Test1234");
 
-        cy.get("mat-error").contains("Username has to have between 2 and 20 characters");
+        cy.get("mat-error").should('contain.text', "Username has to have between 2 and 20 characters");
     });
 
     it('Should show password error', () => {
@@ -45,7 +45,7 @@ describe('Register', () => {
         const id = uuidv4().slice(0,8);
         fillRegisterForm(`${id}@domain.com`, `${id}Username`, "Test", "Test");
 
-        cy.get("mat-error").contains("Provide at least one digit, one lower and upper case letter and between 5 to 25 characters");
+        cy.get("mat-error").should('contain.text', "Provide at least one digit, one lower and upper case letter and between 5 to 25 characters");
     });
 
     it('Should show password mismatch error', () => {
@@ -54,6 +54,6 @@ describe('Register', () => {
         const id = uuidv4().slice(0,8);
         fillRegisterForm(`${id}@domain.com`, `${id}Username`, "Test1234", "Test12345");
 
-        cy.get("mat-error").contains("Passwords do not match");
+        cy.get("mat-error").should('contain.text', "Passwords do not match");
     });
 });
