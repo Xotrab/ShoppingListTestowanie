@@ -12,9 +12,11 @@ describe('Edit item', () => {
 
     beforeEach(() => {
         cy.visit('/home');
+        cy.wait(500);
         const detailsButton = cy.get("button").contains("Details");
         detailsButton.click();
         
+        cy.wait(500);
         const editButton = cy.get("button").contains("Edit");
         editButton.click();
     });
