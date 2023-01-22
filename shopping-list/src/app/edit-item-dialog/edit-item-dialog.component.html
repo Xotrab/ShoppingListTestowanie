@@ -4,7 +4,7 @@
     <h2>
         Edit shopping list item
     </h2>
-    <mat-checkbox [(ngModel)]="editItem.purchased">
+    <mat-checkbox id="purchasedCheckbox" [(ngModel)]="editItem.purchased">
         Purchased
     </mat-checkbox>
     <mat-radio-group [(ngModel)]="selectedMode" style="display: flex; gap: 1rem; margin-bottom: 0.25rem;">
@@ -30,19 +30,19 @@
             <mat-label>
                 Item name
             </mat-label>
-            <input matInput [(ngModel)]="editItem.name">
+            <input id="editNameInput" matInput [(ngModel)]="editItem.name">
         </mat-form-field>
         <mat-form-field class="input">
             <mat-label>
                 Quantity
             </mat-label>
-            <input matInput type="number" min="0.1" step="0.1" [(ngModel)]="editItem.quantity">
+            <input id="editQuantityInput" matInput type="number" min="0.1" step="0.1" [(ngModel)]="editItem.quantity">
         </mat-form-field>
         <mat-form-field class="input">
             <mat-label>
                 Unit
             </mat-label>
-            <mat-select [(ngModel)]="editItem.unit">
+            <mat-select id="editUnitSelect" [(ngModel)]="editItem.unit">
                 <mat-option *ngFor="let unit of defaultUnits" [value]="unit">
                     {{ unit }}
                 </mat-option>
@@ -55,7 +55,7 @@
     <button *ngIf="imagePreviewUrl" mat-stroked-button color="warn" style="width: 26%;" (click)="removeImage()">
         Remove image
     </button>
-    <input hidden #fileInput type="file" accept="image/png, image/jpeg" (change)="onImageSelected($event)">
+    <input id="editImageInput" hidden #fileInput type="file" accept="image/png, image/jpeg" (change)="onImageSelected($event)">
     <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" class="image-preview">
     <div style="display: flex; justify-content: space-between;">
         <button mat-raised-button (click)="cancel()">

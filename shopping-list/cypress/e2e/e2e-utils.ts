@@ -105,3 +105,27 @@ export function tryToRemoveItem() {
         }
     });
 }
+
+export function addItem() {
+    const ownRadioButton = cy.get("mat-radio-button").eq(1);
+
+    ownRadioButton.get('[type="radio"]').check({force: true});
+
+    fillAddItemFieldsForOwnItem("water", "1", "l");
+
+    cy.get('input[type=file]').selectFile('cypress/fixtures/drejk.jpg', { force: true });
+
+    const addItemButton = cy.get("button").contains("Add item");
+    addItemButton.click();
+
+    cy.wait(250);
+}
+
+export function fillEditItemFields(name: string, quantity: string, unit: string) {
+    cy.get('#editNameInput').clear().type(name);
+
+    cy.get('#editQuantityInput').clear().type(quantity);
+
+    cy.get('#editUnitSelect').click();
+    cy.get('mat-option').contains(unit).click();
+}
