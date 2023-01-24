@@ -75,7 +75,7 @@ fdescribe('AuthService', () => {
     expect(successfullyLoggedIn).toBeFalsy();
   });
 
-  it('should log in and navigate to /home when valid credentials are provided', async () => {
+  it('should login and navigate to /home when valid credentials are provided', async () => {
     const loginDto: LoginDto = {
       email: `loginTest@domain.com`,
       password: 'Test1234'

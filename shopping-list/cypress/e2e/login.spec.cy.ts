@@ -58,7 +58,7 @@ describe('Login', () => {
         const loginButton = cy.get("#loginButton");
         loginButton.click();
 
-        cy.get("mat-error").should('contain.text', "Provide an email");
+        cy.get("mat-error").should('contain.text', "Provide the password");
     });
 
     it('should show snackBar message when provided credentials were invalid', () => {

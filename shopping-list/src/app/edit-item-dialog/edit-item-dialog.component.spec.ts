@@ -170,7 +170,7 @@ fdescribe('EditItemDialogComponent', () => {
     expect(shoppingListsServiceSpy.updateShoppingListItem).not.toHaveBeenCalled();
   });
 
-  it('should open snackBar and not call service update method when the unity was not provided', async () => {
+  it('should open snackBar and not call service update method when the unit was not provided', async () => {
     component.editItem.unit = "";
 
     const button = await loader.getHarness(MatButtonHarness.with({text: "Edit item"}));
@@ -267,7 +267,7 @@ fdescribe('EditItemDialogComponent', () => {
     expect(shoppingListsServiceSpy.updateShoppingListItem).toHaveBeenCalledOnceWith(component.data.listId, component.data.itemIndex, component.editItem, true, true, component.uploadedFile);
   });
 
-  it('should call update item with removeOld as false and uploadNew as true if the image was not previously present and new image got uplaoded', async () =>{
+  it('should call update item with removeOld as false and uploadNew as true if the image was not previously present and new image got uploaded', async () =>{
     component.editItem.imageData = null;
 
     component.uploadedFile = new File([""], "filename", { type: 'text/html' });
